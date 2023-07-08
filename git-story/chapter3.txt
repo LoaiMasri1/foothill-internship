@@ -2,4 +2,4 @@ Chapter 3: Git's First Step into the World of Version Control
 With a heavy heart and a bag full of hopes, Git took his first step into the world unknown.
 Git was ready for his journey, prepared to face the trials ahead.
 The first challenge Git faced was understanding the concepts of Version Control.
-using git hooks is awesome feature
+using git hooks is awesome feature 2
