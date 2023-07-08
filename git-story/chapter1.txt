@@ -1,2 +1,3 @@
-Once upon a time, in a village named "Init", lived a brave adventurer named Git.
+Once upon a time, in a town named "Init", lived an enthusiastic explorer named Git.
 He had one dream - to explore the mysterious world of Version Control.
+A little boy was sitting in front of his computer, reading about Git.
