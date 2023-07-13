@@ -1,3 +1,4 @@
+using static ims.Helper.Exceptions.ExceptionHandler;
 using ims.Models;
 using ims.Providers;
 
@@ -145,19 +146,19 @@ public class AppMenu
         switch (option)
         {
             case "1":
-                AddProduct();
+                Handle(AddProduct);
                 break;
             case "2":
-                UpdateProduct();
+                Handle(UpdateProduct);
                 break;
             case "3":
-                DeleteProduct();
+                Handle(DeleteProduct);
                 break;
             case "4":
-                ListProducts();
+                Handle(ListProducts);
                 break;
             case "5":
-                GetProduct();
+                Handle(GetProduct);
                 break;
             case "6":
                 Exit();
