@@ -1,3 +1,5 @@
+using ims.Helper.Exceptions;
+using static ims.Helper.Exceptions.Constants.Messages;
 using ims.Models;
 
 namespace ims.Providers;
@@ -25,7 +27,7 @@ public class InventoryProvider : IInventoryProvider
         var exist = IsProductExists(product.Name);
         if (exist)
         {
-            return false;
+            throw new AlreadyExistException(string.Format(ProductAlreadyExist, product.Name));
         }
 
         var newProduct = new Product
@@ -45,17 +47,11 @@ public class InventoryProvider : IInventoryProvider
         var exist = IsProductExists(productName);
         if (!exist)
         {
-            return false;
+            throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
         var product = GetProduct(productName);
-
-        if (product is null)
-        {
-            return false;
-        }
-
-        Products.Remove(product);
+        Products.Remove(product!);
 
         return true;
     }
@@ -65,7 +61,7 @@ public class InventoryProvider : IInventoryProvider
         var exist = IsProductExists(productName);
         if (!exist)
         {
-            return null!;
+            throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
         var product = Products.FirstOrDefault(p => p.Name == productName.ToLower());
@@ -83,18 +79,18 @@ public class InventoryProvider : IInventoryProvider
         var exist = IsProductExists(productName);
         if (!exist)
         {
-            return false;
+            throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
         var productToUpdate = GetProduct(productName);
         if (productToUpdate is null)
         {
-            return false;
+            throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
         if (productToUpdate.Equals(product))
         {
-            return false;
+            throw new AlreadyExistException(string.Format(ProductAlreadyExist, product.Name));
         }
 
         productToUpdate.Name = product.Name;
