@@ -135,10 +135,7 @@ public class AppMenu
     public static void ShowMenuOptions()
     {
         Console.WriteLine("Please select an option:");
-        foreach (var item in _menu)
-        {
-            Console.WriteLine(item);
-        }
+        _menu.ToList().ForEach(Console.WriteLine);
     }
 
     public static void ProcessOption(string option)
