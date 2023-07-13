@@ -5,3 +5,4 @@
 ## Tasks:
 - [] Get a 35-40 WPM typing speed with touch typing.
 - [x] Learn Git.
+- [x] Simple Inventory Management System using C#
