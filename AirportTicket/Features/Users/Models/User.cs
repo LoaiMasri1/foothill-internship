@@ -1,7 +1,7 @@
-﻿using AirportTicket.Features.User.Models.Enums;
+﻿using AirportTicket.Features.Users.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace AirportTicket.Features.User.Models;
+namespace AirportTicket.Features.Users.Models;
 public class User
 {
     public Guid Id { get; set; }

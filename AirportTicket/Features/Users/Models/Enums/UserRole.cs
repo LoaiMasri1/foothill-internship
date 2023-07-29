@@ -1,4 +1,4 @@
-﻿namespace AirportTicket.Features.User.Models.Enums;
+﻿namespace AirportTicket.Features.Users.Models.Enums;
 
 [Flags]
 public enum UserRole
