@@ -30,6 +30,10 @@ namespace AirportTicket.Common.Services.Impl
                     ? Result<List<TResult>>.Failure(Errors.CSV.CSVNotValid(string.Join(',', errors.Select(e => e.ErrorMessage))))
                     : Result<List<TResult>>.Success(results);
             }
+            catch (CsvHelperException) {
+                return Result<List<TResult>>.Failure(Errors.CSV.CSVNotValid("CSV file is not valid"));
+            }
+
             catch (Exception ex)
             {
                 var errorMessage = $"An unexpected error occurred during the import process. Error: {ex.Message}";
