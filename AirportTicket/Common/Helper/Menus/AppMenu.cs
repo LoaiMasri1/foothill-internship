@@ -20,38 +20,6 @@ public class AppMenu
         Console.WriteLine("2. Register");
         Console.WriteLine("3. Exit");
     }
-
-    private static void ShowManagerMenu()
-    {
-        Console.WriteLine("1. Add a flight");
-        Console.WriteLine("2. Import from CSV");
-        Console.WriteLine("3. View Validations Rules");
-        Console.WriteLine("4. Filter Bookings");
-        Console.WriteLine("5. Exit");
-    }
-
-    private static void ShowFeatures()
-    {
-        Console.WriteLine("1. Flight");
-        Console.WriteLine("2. Booking");
-        Console.WriteLine("3. User");
-        Console.WriteLine("4. Exit");
-    }
-
-    private static void ShowFilterBookingMenu()
-    {
-        Console.WriteLine("Filter Bookings");
-        Console.WriteLine("1. By Flight");
-        Console.WriteLine("2. By Passenger");
-        Console.WriteLine("3. By Departure Country");
-        Console.WriteLine("4. By Destination Country");
-        Console.WriteLine("5. By Departure Date");
-        Console.WriteLine("6. By Departure Airport");
-        Console.WriteLine("7. By Destination Airport");
-        Console.WriteLine("8. By Flight Class Type");
-        Console.WriteLine("9. Exit");
-    }
-
     public static async Task Handle()
     {
         while (true)
@@ -103,16 +71,10 @@ public class AppMenu
         }
         else if (user.Role == UserRole.Manager)
         {
-            await HandleManagerMenu();
+            await ManagerMenu.Handle();
         }
     }
 
-    private static Task HandleManagerMenu()
-    {
-        throw new NotImplementedException();
-    }
-
-    
     private static async Task HandleRegistration()
     {
         Console.WriteLine("Register");
