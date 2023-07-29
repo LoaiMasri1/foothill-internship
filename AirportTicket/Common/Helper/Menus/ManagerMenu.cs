@@ -1,6 +1,5 @@
 ﻿using AirportTicket.Common.Constants;
 using AirportTicket.Common.Services.Impl;
-using AirportTicket.Common.Services.Intf;
 using AirportTicket.Core.Configuration;
 using AirportTicket.Features.Bookings.Services;
 using AirportTicket.Features.Flights.Models;
