@@ -6,7 +6,7 @@ using AirportTicket.Features.Users.Models;
 
 namespace AirportTicket.Features.Auth;
 
-public class AuthService:IAuthService
+public class AuthService : IAuthService
 {
     private readonly UserService _userService;
 
