@@ -57,4 +57,21 @@ public class Errors
         public static Error DestinationNotValid(string message) =>
         new("Destination.NotValid", message);
     }
+
+    public partial class Booking
+    {
+        public static readonly Error BookingAlreadyExists =
+        new("Booking.AlreadyExists", "Booking already exists");
+
+        public static readonly Error BookingNotFound =
+        new("Booking.NotFound", "Booking not found");
+
+        public static readonly Error BookingNotCreated =
+        new("Booking.NotCreated", "Booking not created");
+
+        public static readonly Error BookingNotUpdated =
+        new("Booking.NotUpdated", "Booking not updated");
+        public static Error BookingNotValid(string message) =>
+        new("Booking.NotValid", message);
+    }
 }
