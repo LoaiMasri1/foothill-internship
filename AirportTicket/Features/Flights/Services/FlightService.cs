@@ -1,7 +1,7 @@
 ﻿using AirportTicket.Common;
 using AirportTicket.Common.Constants;
 using AirportTicket.Common.Helper;
-using AirportTicket.Common.Services;
+using AirportTicket.Common.Models;
 using AirportTicket.Core;
 using AirportTicket.Features.Flights.Models;
 

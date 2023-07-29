@@ -1,4 +1,4 @@
-﻿namespace AirportTicket.Common.Services;
+﻿namespace AirportTicket.Common.Models;
 
 public class ValidationRule
 {

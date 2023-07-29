@@ -1,4 +1,4 @@
-﻿using AirportTicket.Common.Services;
+﻿using AirportTicket.Common.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
