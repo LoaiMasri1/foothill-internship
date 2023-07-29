@@ -1,21 +1,17 @@
 ﻿using AirportTicket.Common.Services.Impl;
 using AirportTicket.Core.Configuration;
 using AirportTicket.Features.Auth;
-using AirportTicket.Features.Bookings.Services;
 using AirportTicket.Features.Flights.Models;
-using AirportTicket.Features.Flights.Services;
 using AirportTicket.Features.Users.Models;
 using AirportTicket.Features.Users.Models.Enums;
 using AirportTicket.Features.Users.Services;
 using System.Text;
 
-namespace AirportTicket.Common.Helper;
+namespace AirportTicket.Common.Helper.Menus;
 
 public class AppMenu
 {
     private static readonly AuthService authService = new();
-    private static readonly BookingService bookingService = new();
-    private static readonly FlightService flightService = new();
     private static readonly UserService userService = new();
     private static readonly ImportCSVFileService<Flight, FlightMap> importCSVFileService = new();
     private static void Show()
@@ -23,14 +19,6 @@ public class AppMenu
         Console.WriteLine("1. Login");
         Console.WriteLine("2. Register");
         Console.WriteLine("3. Exit");
-    }
-
-    private static void ShowPassengerMenu()
-    {
-        Console.WriteLine("1. Book a flight");
-        Console.WriteLine("2. Cancel a flight");
-        Console.WriteLine("3. View my bookings");
-        Console.WriteLine("4. Exit");
     }
 
     private static void ShowManagerMenu()
@@ -89,7 +77,7 @@ public class AppMenu
         }
     }
 
-    private static void Exit() => Environment.Exit(0);
+    public static void Exit() => Environment.Exit(0);
     private static async Task HandleLogin()
     {
         Console.WriteLine("Login");
@@ -111,7 +99,7 @@ public class AppMenu
 
         if (user.Role == UserRole.Passenger)
         {
-            await HandlePassengerMenu(user);
+            await PassengerMenu.Handle(user);
         }
         else if (user.Role == UserRole.Manager)
         {
@@ -124,11 +112,7 @@ public class AppMenu
         throw new NotImplementedException();
     }
 
-    private static Task HandlePassengerMenu(User user)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     private static async Task HandleRegistration()
     {
         Console.WriteLine("Register");
