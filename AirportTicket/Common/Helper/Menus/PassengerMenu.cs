@@ -20,13 +20,7 @@ public class PassengerMenu
         Console.WriteLine("4. Exit");
     }
 
-    private static void ShowFlightClassesMenu()
-    {
-        Console.WriteLine("Select Class");
-        Console.WriteLine("1. Economy");
-        Console.WriteLine("2. Business");
-        Console.WriteLine("3. First Class");
-    }
+    
 
 
     public static async Task Handle(User user)
@@ -70,7 +64,7 @@ public class PassengerMenu
             return;
         }
 
-        ShowFlightClassesMenu();
+        AppMenu.ShowFlightClassesMenu(); 
 
         if (!int.TryParse(Console.ReadLine(), out var classInput) || classInput < 1 || classInput > 3)
         {

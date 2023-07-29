@@ -1,10 +1,6 @@
-﻿using AirportTicket.Common.Services.Impl;
-using AirportTicket.Core.Configuration;
-using AirportTicket.Features.Auth;
-using AirportTicket.Features.Flights.Models;
+﻿using AirportTicket.Features.Auth;
 using AirportTicket.Features.Users.Models;
 using AirportTicket.Features.Users.Models.Enums;
-using AirportTicket.Features.Users.Services;
 using System.Text;
 
 namespace AirportTicket.Common.Helper.Menus;
@@ -12,13 +8,18 @@ namespace AirportTicket.Common.Helper.Menus;
 public class AppMenu
 {
     private static readonly AuthService authService = new();
-    private static readonly UserService userService = new();
-    private static readonly ImportCSVFileService<Flight, FlightMap> importCSVFileService = new();
     private static void Show()
     {
         Console.WriteLine("1. Login");
         Console.WriteLine("2. Register");
         Console.WriteLine("3. Exit");
+    }
+    public static void ShowFlightClassesMenu()
+    {
+        Console.WriteLine("Select Class");
+        Console.WriteLine("1. Economy");
+        Console.WriteLine("2. Business");
+        Console.WriteLine("3. First Class");
     }
     public static async Task Handle()
     {
@@ -132,6 +133,4 @@ public class AppMenu
 
         Console.WriteLine("Registration successful");
     }
-
-
 }
