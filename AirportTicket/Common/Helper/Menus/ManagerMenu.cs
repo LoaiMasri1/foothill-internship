@@ -149,8 +149,8 @@ public class ManagerMenu
     {
         Console.WriteLine("Import from CSV");
         Console.WriteLine("Enter File Name");
-        Console.WriteLine("Note: you can use the sample file in the Documents/Storage folder");
-        System.Console.WriteLine("And please place the file in the Documents/Storage folder");
+        Console.WriteLine("Note: you can take a look for sample file in the Project folder");
+        System.Console.WriteLine("And please place your csv file in the Documents/Storage folder");
 
 
         var fileName = Console.ReadLine() ?? string.Empty;

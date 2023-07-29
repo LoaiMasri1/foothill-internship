@@ -18,7 +18,6 @@ namespace AirportTicket.Common.Services.Impl
             {
                 var results = new List<TResult>();
                 var path = GetPath(fileName);
-                MoveSampleDataToDocument();
 
                 using var reader = new StreamReader(path);
                 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
@@ -37,14 +36,6 @@ namespace AirportTicket.Common.Services.Impl
                 Console.WriteLine(errorMessage);
                 return Result<List<TResult>>.Failure(Error.NotExpected);
             }
-        }
-
-        private static void MoveSampleDataToDocument()
-        {
-            var destinationPath = Path.Combine(DocumentsFolderPath, "Storage");
-            Directory.CreateDirectory(destinationPath);
-            var destinationFile = Path.Combine(destinationPath, "SampleData.csv");
-            File.Copy(SampleDataPath, destinationFile, true);
         }
 
         private static async Task HandleAdditionAsync(
