@@ -2,11 +2,19 @@
 
 namespace AirportTicket.Core;
 
-public class Storage
+public class Storage : IStorage
 {
     private Storage() { }
 
-    public static async Task<ICollection<T>> ReadAsync<T>() where T : class
+    private static Storage? _instance;
+
+    public static Storage Instance
+    {
+        get => _instance ??= new Storage();
+    }
+
+
+    public async Task<ICollection<T>> ReadAsync<T>() where T : class
     {
         var collectionName = typeof(T).Name;
         var filePath = GetFilePath(collectionName);
@@ -15,16 +23,7 @@ public class Storage
         return await ReadCollectionFromFileAsync<T>(filePath);
     }
 
-    private static async Task CreateDircetoryIfFileNotExist(string filePath)
-    {
-        if (!File.Exists(filePath))
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-            await File.WriteAllTextAsync(filePath, "{}");
-        }
-    }
-
-    public static async Task WriteAsync<T>(ICollection<T> data) where T : class
+    public async Task WriteAsync<T>(ICollection<T> data) where T : class
     {
         var collectionName = typeof(T).Name;
         string filePath = GetFilePath(collectionName);
@@ -43,6 +42,15 @@ public class Storage
         catch (Exception e)
         {
             Console.WriteLine(e.Message, e.StackTrace);
+        }
+    }
+
+    private async static Task CreateDircetoryIfFileNotExist(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+            await File.WriteAllTextAsync(filePath, "{}");
         }
     }
 
