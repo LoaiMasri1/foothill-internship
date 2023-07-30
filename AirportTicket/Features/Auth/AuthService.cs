@@ -9,7 +9,7 @@ namespace AirportTicket.Features.Auth;
 public class AuthService : IAuthService
 {
     private readonly UserService _userService;
-
+    private static readonly Storage _storage = Storage.Instance;
     public AuthService()
     {
         _userService = new UserService();
@@ -34,7 +34,7 @@ public class AuthService : IAuthService
 
     public async Task<Result<User>> LoginAsync(string email, string password)
     {
-        var users = await Storage.ReadAsync<User>();
+        var users = await _storage.ReadAsync<User>();
 
         var user = users.FirstOrDefault(u => u.Email == email && u.Password == password);
 

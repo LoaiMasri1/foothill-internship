@@ -9,10 +9,11 @@ using AirportTicket.Features.Flights.Models;
 
 namespace AirportTicket.Features.Bookings.Services;
 
-public class BookingService:IBookingService
+public class BookingService : IBookingService
 {
     private static readonly List<Booking> _bookings;
     private readonly FlightService _flightService;
+    private static readonly Storage _storage = Storage.Instance;
 
     static BookingService()
     {
@@ -26,7 +27,7 @@ public class BookingService:IBookingService
 
     private static async Task<List<Booking>> GetBookings()
     {
-        var bookings = await Storage.ReadAsync<Booking>();
+        var bookings = await _storage.ReadAsync<Booking>();
         return bookings.ToList();
     }
     public async Task<Result<Booking>> AddAsync(Booking entity)
@@ -67,7 +68,7 @@ public class BookingService:IBookingService
 
         _bookings.Add(entity);
 
-        await Storage.WriteAsync(_bookings);
+        await _storage.WriteAsync(_bookings);
         return Result<Booking>.Success(entity);
     }
 
@@ -83,7 +84,7 @@ public class BookingService:IBookingService
 
         _bookings.Remove(booking);
 
-        await Storage.WriteAsync(_bookings);
+        await _storage.WriteAsync(_bookings);
 
         return Result<Booking>.Success(booking);
     }
@@ -141,7 +142,7 @@ public class BookingService:IBookingService
         booking.TotalPrice = flight!.Price + entity.ClassInfo.Price;
 
 
-        Storage.WriteAsync(_bookings).Wait();
+        _storage.WriteAsync(_bookings).Wait();
 
         return Result<Booking>.Success(entity);
     }

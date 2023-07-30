@@ -10,6 +10,7 @@ namespace AirportTicket.Features.Flights.Services;
 public class FlightService : IFlightService
 {
     private static readonly List<Flight> _flights;
+    private static readonly Storage _storage = Storage.Instance;
 
     static FlightService()
     {
@@ -17,7 +18,7 @@ public class FlightService : IFlightService
     }
     private static async Task<List<Flight>> GetFlights()
     {
-        var flights = await Storage.ReadAsync<Flight>();
+        var flights = await _storage.ReadAsync<Flight>();
         return flights.ToList();
     }
 
@@ -38,7 +39,7 @@ public class FlightService : IFlightService
         }
 
         _flights.Add(entity);
-        await Storage.WriteAsync(_flights);
+        await _storage.WriteAsync(_flights);
         return Result<Flight>.Success(entity);
     }
 
@@ -75,7 +76,7 @@ public class FlightService : IFlightService
         flight.Destination = entity.Destination ?? flight.Destination;
         flight.Departure = entity.Departure ?? flight.Departure;
         flight.AvailableSeats = entity.AvailableSeats == 0 ? flight.AvailableSeats : entity.AvailableSeats;
-        Storage.WriteAsync(_flights).Wait();
+        _storage.WriteAsync(_flights).Wait();
         return Result<Flight>.Success(flight);
     }
 

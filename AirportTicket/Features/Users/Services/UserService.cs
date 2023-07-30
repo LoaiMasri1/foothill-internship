@@ -11,6 +11,7 @@ namespace AirportTicket.Features.Users.Services;
 public class UserService : IUserService
 {
     private static readonly List<User> _users;
+    private static readonly Storage _storage = Storage.Instance;
 
     static UserService()
     {
@@ -18,7 +19,7 @@ public class UserService : IUserService
     }
     private static async Task<List<User>> GetUsers()
     {
-        var users = await Storage.ReadAsync<User>();
+        var users = await _storage.ReadAsync<User>();
         var passengers = users.Where(u => u.Role == UserRole.Passenger).ToList();
         return passengers;
     }
@@ -37,7 +38,7 @@ public class UserService : IUserService
             return Result<User>.Failure(Errors.User.UserAlreadyExists);
         }
         _users.Add(entity);
-        await Storage.WriteAsync(_users);
+        await _storage.WriteAsync(_users);
 
         return Result<User>.Success(entity);
     }
