@@ -10,7 +10,5 @@ public class SunBotStrategy : WeatherBotStrategy
     }
 
     protected override bool ShouldActivate(WeatherData weatherData)
-    {
-        throw new NotImplementedException();
-    }
+    => weatherData.Temperature > _config.TemperatureThreshold;
 }

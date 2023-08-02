@@ -10,7 +10,5 @@ public class RainBotStrategy : WeatherBotStrategy
     }
 
     protected override bool ShouldActivate(WeatherData weatherData)
-    {
-        throw new NotImplementedException();
-    }
+    => weatherData.Humidity > _config.HumidityThreshold;
 }
