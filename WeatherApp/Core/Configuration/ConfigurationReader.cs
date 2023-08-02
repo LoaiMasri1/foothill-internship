@@ -1,20 +1,16 @@
-﻿using WeatherApp.Common;
+﻿using WeatherApp.Common.Models;
 
 namespace WeatherApp.Core.Configuration;
 
 public class ConfigurationReader
 {
-    private readonly JSONInputParser<Dictionary<string, BotConfiguration>> _parser;
-    public ConfigurationReader(JSONInputParser<Dictionary<string, BotConfiguration>> parser)
-    {
-        _parser = parser;
-    }
+    private readonly IInputParser<Dictionary<string, BotConfiguration>> _parser;
+    public ConfigurationReader(IInputParser<Dictionary<string, BotConfiguration>> parser)
+    => _parser = parser;
 
     public Dictionary<string, BotConfiguration> ReadConfiguration(string filePath)
     {
-        var json = File.ReadAllText(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            filePath));
+        var json = File.ReadAllText(filePath);
         var data = _parser.Parse(json)
          ?? throw new Exception("Invalid configuration file");
 
