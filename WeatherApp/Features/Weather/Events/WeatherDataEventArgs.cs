@@ -1,6 +1,6 @@
-﻿using WeatherApp.Core.Features.Weather.Models;
+﻿using WeatherApp.Features.Weather.Models;
 
-namespace WeatherApp.Core.Features.Weather.Events;
+namespace WeatherApp.Features.Weather.Events;
 
 public class WeatherDataEventArgs : EventArgs
 {

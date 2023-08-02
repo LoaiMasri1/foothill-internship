@@ -1,6 +1,4 @@
-﻿using WeatherApp.Core.Configuration;
-
-namespace WeatherApp.Core.Features.Weather.Models;
+﻿namespace WeatherApp.Features.Weather.Models;
 
 public abstract class WeatherBotStrategy
 {
@@ -21,7 +19,7 @@ public abstract class WeatherBotStrategy
     }
     protected abstract bool ShouldActivate(WeatherData weatherData);
 
-    private static string FormatBotActivationMessage(string botName,string message)
+    private static string FormatBotActivationMessage(string botName, string message)
         => $@"
         {botName} Activated!
         {botName}: {message}";
