@@ -4,18 +4,18 @@ namespace WeatherApp.Core.Features.Weather.Models;
 
 public abstract class WeatherBotStrategy
 {
-    protected readonly BotConfiguration _config;
+    protected readonly string _message;
 
-    protected WeatherBotStrategy(BotConfiguration config)
+    protected WeatherBotStrategy(string message)
     {
-        _config = config;
+        _message = message;
     }
 
     public void Activate(WeatherData weatherData)
     {
         if (ShouldActivate(weatherData))
         {
-            string response = FormatBotActivationMessage(GetType().Name, _config.Message);
+            string response = FormatBotActivationMessage(GetType().Name, _message);
             Console.WriteLine(response);
         }
     }

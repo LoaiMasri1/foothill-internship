@@ -1,14 +1,17 @@
-﻿using WeatherApp.Core.Configuration;
-using WeatherApp.Core.Features.Weather.Models;
+﻿using WeatherApp.Core.Features.Weather.Models;
 
 namespace WeatherApp.Core.Features.Weather.Impl;
 
 public class RainBotStrategy : WeatherBotStrategy
 {
-    public RainBotStrategy(BotConfiguration config) : base(config)
+    private readonly double _humidityThreshold;
+    public RainBotStrategy(
+        string message,
+        double humidityThreshold) : base(message)
     {
+        _humidityThreshold = humidityThreshold;
     }
 
     protected override bool ShouldActivate(WeatherData weatherData)
-    => weatherData.Humidity > _config.HumidityThreshold;
+    => weatherData.Humidity > _humidityThreshold;
 }
