@@ -2,22 +2,26 @@
 
 public abstract class WeatherBotStrategy
 {
-    protected readonly string _message;
+    public string Message { get; set; }
+    public bool IsActivated { get; set; }
 
     protected WeatherBotStrategy(string message)
     {
-        _message = message;
+        Message = message;
+        IsActivated = false;
     }
 
     public void Activate(WeatherData weatherData)
     {
         if (ShouldActivate(weatherData))
         {
-            string response = FormatBotActivationMessage(GetType().Name, _message);
+            IsActivated = true;
+            string response = FormatBotActivationMessage(GetType().Name, Message);
             Console.WriteLine(response);
         }
+        IsActivated = false;
     }
-    protected abstract bool ShouldActivate(WeatherData weatherData);
+    public abstract bool ShouldActivate(WeatherData weatherData);
 
     private static string FormatBotActivationMessage(string botName, string message)
         => $@"

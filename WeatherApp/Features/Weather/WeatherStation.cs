@@ -7,39 +7,56 @@ namespace WeatherApp.Features.Weather;
 
 public class WeatherStation
 {
+    private IInputParser<WeatherData>? _parser;
+
     public event EventHandler<WeatherDataEventArgs>? WeatherDataReceived;
+
+    public WeatherStation(IInputParser<WeatherData>? parser = null)
+    {
+        _parser = parser;
+    }
 
     public void Start()
     {
         while (true)
         {
-            Console.Write("Enter weather data (JSON or XML): ");
-            var input = Console.ReadLine()?.Trim() ?? string.Empty;
-
+            var input = ReadInput();
             if (string.IsNullOrEmpty(input))
             {
                 continue;
             }
 
-            IInputParser<WeatherData>? parser = GetParser(input);
-            if (parser == null)
-            {
-                Console.WriteLine("Invalid input");
-                continue;
-            }
-
-            var weatherData = parser.Parse(input);
-            Console.WriteLine(weatherData?.Location);
-
-            if (weatherData == null)
-            {
-                Console.WriteLine("Invalid input");
-                continue;
-            }
-
-            OnWeatherDataReceived(weatherData);
+            ProcessWeatherData(input);
         }
     }
+
+    private static string ReadInput()
+    {
+        Console.Write("Enter weather data (JSON or XML): ");
+        return Console.ReadLine()?.Trim() ?? string.Empty;
+    }
+
+    public void ProcessWeatherData(string input)
+    {
+        _parser = GetParser(input);
+
+        if (_parser is null)
+        {
+            Console.WriteLine("Invalid input");
+            return;
+        }
+
+        var weatherData = _parser.Parse(input);
+        if (weatherData == null)
+        {
+            Console.WriteLine("Invalid input");
+            return;
+        }
+
+        Console.WriteLine(weatherData.Location);
+        OnWeatherDataReceived(weatherData);
+    }
+
 
     private static IInputParser<WeatherData>? GetParser(string input)
     {
@@ -53,7 +70,7 @@ public class WeatherStation
         }
         else
         {
-            return null;
+            return new JSONInputParser<WeatherData>();
         }
     }
 

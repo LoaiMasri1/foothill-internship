@@ -13,6 +13,6 @@ public class SunBotStrategy : WeatherBotStrategy
         _temperatureThreshold = temperatureThreshold;
     }
 
-    protected override bool ShouldActivate(WeatherData weatherData)
+    public override bool ShouldActivate(WeatherData weatherData)
     => weatherData.Temperature > _temperatureThreshold;
 }

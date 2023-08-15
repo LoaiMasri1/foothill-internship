@@ -12,6 +12,6 @@ public class RainBotStrategy : WeatherBotStrategy
         _humidityThreshold = humidityThreshold;
     }
 
-    protected override bool ShouldActivate(WeatherData weatherData)
+    public override bool ShouldActivate(WeatherData weatherData)
     => weatherData.Humidity > _humidityThreshold;
 }

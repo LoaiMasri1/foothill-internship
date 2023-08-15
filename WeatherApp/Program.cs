@@ -4,6 +4,7 @@ using WeatherApp.Core.Configuration;
 using WeatherApp.Features.Weather;
 using WeatherApp.Features.Weather.Events.Handler;
 using WeatherApp.Features.Weather.Factories;
+using WeatherApp.Features.Weather.Models;
 
 IInputParser<Dictionary<string,BotConfiguration>> parser =
     new JSONInputParser<Dictionary<string, BotConfiguration>>();
@@ -13,7 +14,6 @@ ConfigurationReader configurationReader = new(parser);
 var configuration = configurationReader.ReadConfiguration("appsettings.json");
 
 IWeatherBotFactory botFactory = new WeatherBotFactory(configuration);
-
 
 WeatherStation weatherStation = new();
 
