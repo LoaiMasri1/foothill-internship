@@ -1,4 +1,5 @@
 ﻿using AirportTicket.Common.Constants;
+using AirportTicket.Core;
 using AirportTicket.Features.Bookings.Models;
 using AirportTicket.Features.Bookings.Services;
 using AirportTicket.Features.Flights.Models;
@@ -9,8 +10,9 @@ namespace AirportTicket.Common.Helper.Menus;
 
 public class PassengerMenu
 {
-    private static readonly BookingService _bookingService = new();
-    private static readonly FlightService _flightService = new();
+    private static readonly IStorage _storage = Storage.GetInstance();
+    private static readonly FlightService _flightService = new(_storage);
+    private static readonly IBookingService _bookingService = new BookingService(_flightService, _storage);
 
     private static void Show()
     {
@@ -20,7 +22,7 @@ public class PassengerMenu
         Console.WriteLine("4. Exit");
     }
 
-    
+
 
 
     public static async Task Handle(User user)
@@ -64,7 +66,7 @@ public class PassengerMenu
             return;
         }
 
-        AppMenu.ShowFlightClassesMenu(); 
+        AppMenu.ShowFlightClassesMenu();
 
         if (!int.TryParse(Console.ReadLine(), out var classInput) || classInput < 1 || classInput > 3)
         {

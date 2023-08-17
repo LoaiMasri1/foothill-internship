@@ -1,5 +1,8 @@
 ﻿using AirportTicket.Common.Constants;
+using AirportTicket.Common.Models;
 using AirportTicket.Common.Services.Impl;
+using AirportTicket.Common.Wrappers;
+using AirportTicket.Core;
 using AirportTicket.Core.Configuration;
 using AirportTicket.Features.Bookings.Services;
 using AirportTicket.Features.Flights.Models;
@@ -11,11 +14,13 @@ namespace AirportTicket.Common.Helper.Menus;
 
 public class ManagerMenu
 {
-    private static readonly FlightService _flightService = new();
+    private static readonly IStorage _storage = Storage.GetInstance();
+    private static readonly ICSVReader _csvReader = new CSVReader();
+    private static readonly FlightService _flightService = new(_storage);
     private static readonly ImportCSVFileService<Flight, FlightMap>
-        _importCSVFileService = new();
-    private static readonly BookingService _bookingService = new();
-    private static readonly UserService _userService = new();
+        _importCSVFileService = new(_csvReader);
+    private static readonly IBookingService _bookingService = new BookingService(_flightService, _storage);
+    private static readonly UserService _userService = new(_storage);
 
     private static void ShowMenu()
     {
@@ -76,7 +81,7 @@ public class ManagerMenu
                     break;
             }
         }
-    } 
+    }
 
     private static async Task AddFlight()
     {
@@ -303,7 +308,7 @@ public class ManagerMenu
 
     private static void FilterBookingsByDepartureAirport()
     {
-        var bookings = 
+        var bookings =
             FilteringHelper.GetFilteredEntitiesDictionary(_bookingService);
 
         var departureAirports = bookings.Select(b => b.Value.Flight.Departure.Airport)

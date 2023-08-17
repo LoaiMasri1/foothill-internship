@@ -1,3 +1,4 @@
 ﻿using AirportTicket.Common.Helper.Menus;
 
-AppMenu.Handle().Wait();
+var appMenu = new AppMenu();
+await appMenu.Handle();

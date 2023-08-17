@@ -1,13 +1,23 @@
-﻿using AirportTicket.Features.Auth;
+﻿using AirportTicket.Core;
+using AirportTicket.Features.Auth;
 using AirportTicket.Features.Users.Models;
 using AirportTicket.Features.Users.Models.Enums;
+using AirportTicket.Features.Users.Services;
 using System.Text;
 
 namespace AirportTicket.Common.Helper.Menus;
 
 public class AppMenu
 {
-    private static readonly AuthService authService = new();
+    private readonly IStorage _storage = Storage.GetInstance();
+    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
+    public AppMenu()
+    {
+        _userService = new UserService(_storage);
+        _authService = new AuthService(_userService);    
+    }
+
     private static void Show()
     {
         Console.WriteLine("1. Login");
@@ -21,7 +31,7 @@ public class AppMenu
         Console.WriteLine("2. Business");
         Console.WriteLine("3. First Class");
     }
-    public static async Task Handle()
+    public async Task Handle()
     {
         while (true)
         {
@@ -47,7 +57,7 @@ public class AppMenu
     }
 
     public static void Exit() => Environment.Exit(0);
-    private static async Task HandleLogin()
+    private async Task HandleLogin()
     {
         Console.WriteLine("Login");
         Console.WriteLine("Enter your email");
@@ -56,7 +66,7 @@ public class AppMenu
         Console.WriteLine("Enter your password");
         var passwordToLogin = Console.ReadLine() ?? string.Empty;
 
-        var loginResult = await authService.LoginAsync(emailToLogin, passwordToLogin);
+        var loginResult = await _authService.LoginAsync(emailToLogin, passwordToLogin);
 
         if (loginResult.IsFailure)
         {
@@ -76,7 +86,7 @@ public class AppMenu
         }
     }
 
-    private static async Task HandleRegistration()
+    private async Task HandleRegistration()
     {
         Console.WriteLine("Register");
 
@@ -123,7 +133,7 @@ public class AppMenu
             emailToRegister,
             role);
 
-        var registerResult = await authService.RegisterAsync(userToRegister);
+        var registerResult = await _authService.RegisterAsync(userToRegister);
 
         if (registerResult.IsFailure)
         {
