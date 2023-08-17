@@ -15,7 +15,7 @@ public class Booking
     public DateTime DateUtc { get; set; }
     [Required(ErrorMessage = "ClassInfo is required.")]
     public FlightClassInfo ClassInfo { get; set; } = null!;
-    [Range(0.01, double.MaxValue, ErrorMessage = "TotalPrice must be greater than 0.")]
+    [Range(0.01, int.MaxValue, ErrorMessage = "TotalPrice must be greater than 0.")]
     public decimal TotalPrice { get; set; }
 
 
