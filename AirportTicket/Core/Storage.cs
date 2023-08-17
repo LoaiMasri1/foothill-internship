@@ -1,20 +1,27 @@
-﻿using AirportTicket.Common;
-using AirportTicket.Common.Models;
+﻿using AirportTicket.Common.Models;
+using AirportTicket.Common.Wrappers;
 using System.Text.Json;
 
 namespace AirportTicket.Core;
 
 public class Storage : IStorage
 {
-    private Storage() { }
-
-
-    private static Storage? _instance;
-    private static readonly IFileWrapper _fileWrapper = new FileWrapper();
-
-    public static Storage Instance
+    private Storage(IFileWrapper fileWrapper)
     {
-        get => _instance ??= new Storage();
+        _fileWrapper = fileWrapper;
+    }
+
+
+    private static IStorage? _instance;
+    private readonly IFileWrapper _fileWrapper;
+
+    public static IStorage GetInstance(IFileWrapper fileWrapper = null)
+    {
+        fileWrapper ??= new FileWrapper();
+
+        _instance ??= new Storage(fileWrapper);
+
+        return _instance;
     }
 
 
@@ -22,7 +29,7 @@ public class Storage : IStorage
     {
         var collectionName = typeof(T).Name;
         var filePath = GetFilePath(collectionName);
-        await CreateDircetoryIfFileNotExist(filePath);
+        await CreateDirectoryIfFileNotExist(filePath);
 
         return await ReadCollectionFromFileAsync<T>(filePath);
     }
@@ -49,7 +56,7 @@ public class Storage : IStorage
         }
     }
 
-    private async static Task CreateDircetoryIfFileNotExist(string filePath)
+    private async Task CreateDirectoryIfFileNotExist(string filePath)
     {
         var isExists = _fileWrapper.Exists(filePath);
 
@@ -60,7 +67,7 @@ public class Storage : IStorage
         }
     }
 
-    private static async Task<ICollection<T>> ReadCollectionFromFileAsync<T>
+    private async Task<ICollection<T>> ReadCollectionFromFileAsync<T>
         (string filePath) where T : class
     {
         var file = await _fileWrapper.ReadAllTextAsync(filePath);
