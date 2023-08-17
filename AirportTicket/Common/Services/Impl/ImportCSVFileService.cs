@@ -1,15 +1,22 @@
-﻿using System.Globalization;
-using static AirportTicket.Common.Constants.PathConstants;
+﻿using AirportTicket.Common.Constants;
+using AirportTicket.Common.Models;
 using AirportTicket.Common.Services.Intf;
 using CsvHelper;
 using CsvHelper.Configuration;
-using AirportTicket.Common.Constants;
+using System.Globalization;
+using static AirportTicket.Common.Constants.PathConstants;
 
 namespace AirportTicket.Common.Services.Impl
 {
     public class ImportCSVFileService<TResult, TMap> : IImportFileService<TResult>
         where TResult : class where TMap : ClassMap
     {
+        private readonly ICSVReader _csvReader;
+
+        public ImportCSVFileService(ICSVReader csvReader)
+        {
+            _csvReader = csvReader;
+        }
         public async Task<Result<List<TResult>>> ImportAsync(
             string fileName,
             IBaseService<TResult> service)
@@ -18,19 +25,16 @@ namespace AirportTicket.Common.Services.Impl
             {
                 var results = new List<TResult>();
                 var path = GetPath(fileName);
-
-                using var reader = new StreamReader(path);
-                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-                csv.Context.RegisterClassMap<TMap>();
-                var records = csv.GetRecords<TResult>();
+                var records = _csvReader.Read<TResult, TMap>(path);
+                
                 var errors = new List<Error>();
                 await HandleAdditionAsync(service, results, records, errors);
-
                 return errors.Any()
                     ? Result<List<TResult>>.Failure(Errors.CSV.CSVNotValid(string.Join(',', errors.Select(e => e.ErrorMessage))))
                     : Result<List<TResult>>.Success(results);
             }
-            catch (CsvHelperException) {
+            catch (CsvHelperException)
+            {
                 return Result<List<TResult>>.Failure(Errors.CSV.CSVNotValid("CSV file is not valid"));
             }
 
