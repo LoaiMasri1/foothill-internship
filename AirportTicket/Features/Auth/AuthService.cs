@@ -1,18 +1,18 @@
-﻿using AirportTicket.Common.Constants;
-using AirportTicket.Common;
+﻿using AirportTicket.Common;
+using AirportTicket.Common.Constants;
 using AirportTicket.Core;
-using AirportTicket.Features.Users.Services;
 using AirportTicket.Features.Users.Models;
+using AirportTicket.Features.Users.Services;
 
 namespace AirportTicket.Features.Auth;
 
 public class AuthService : IAuthService
 {
-    private readonly UserService _userService;
-    private static readonly Storage _storage = Storage.Instance;
-    public AuthService()
+    private readonly IUserService _userService;
+    private static readonly IStorage _storage = Storage.GetInstance();
+    public AuthService(IUserService userService)
     {
-        _userService = new UserService();
+        _userService = userService;
     }
 
     public async Task<Result<User>> RegisterAsync(User user)

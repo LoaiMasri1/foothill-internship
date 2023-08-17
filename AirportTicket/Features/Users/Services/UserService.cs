@@ -10,14 +10,13 @@ namespace AirportTicket.Features.Users.Services;
 
 public class UserService : IUserService
 {
-    private static readonly List<User> _users;
-    private static readonly Storage _storage = Storage.Instance;
-
-    static UserService()
+    private readonly IStorage _storage;
+    public UserService(IStorage storage)
     {
-        _users = GetUsers().Result;
+        _storage = storage;
+        
     }
-    private static async Task<List<User>> GetUsers()
+    private async Task<List<User>> GetUsers()
     {
         var users = await _storage.ReadAsync<User>();
         var passengers = users.Where(u => u.Role == UserRole.Passenger).ToList();
@@ -26,36 +25,47 @@ public class UserService : IUserService
 
     public async Task<Result<User>> AddAsync(User entity)
     {
+        var users = await GetUsers();
+
         var validationResult = ValidateUser(entity);
         if (validationResult.IsFailure)
         {
             return Result<User>.Failure(validationResult.Error);
         }
 
-        var isExist = _users.Any(p => p.Email == entity.Email);
+        var isExist = users.Any(p => p.Email == entity.Email);
         if (isExist)
         {
             return Result<User>.Failure(Errors.User.UserAlreadyExists);
         }
-        _users.Add(entity);
-        await _storage.WriteAsync(_users);
+        users.Add(entity);
+        await _storage.WriteAsync(users);
 
         return Result<User>.Success(entity);
     }
 
     public Result<User?> Get(Func<User, bool> predicate)
     {
-        var user = _users.FirstOrDefault(predicate);
+        var users = GetUsers().Result;
+
+        var user = users.FirstOrDefault(predicate);
+        if (user is null)
+        {
+            return Result<User?>.Failure(Errors.User.UserNotFound);
+        }
+
         return Result<User?>.Success(user);
     }
 
     public Result<ICollection<User>> GetAll()
     {
-        return Result<ICollection<User>>.Success(_users);
+        var users = GetUsers().Result;
+        return Result<ICollection<User>>.Success(users);
     }
 
     public Result<User> Update(Guid Id, User entity)
     {
+        var users  = GetUsers().Result;
 
         var validationResult = ValidateUser(entity);
         if (validationResult.IsFailure)
@@ -64,7 +74,7 @@ public class UserService : IUserService
         }
 
 
-        var user = _users.FirstOrDefault(p => p.Id == entity.Id);
+        var user = users.FirstOrDefault(p => p.Id == entity.Id);
         if (user == null)
         {
             return Result<User>.Failure(Errors.User.UserNotFound);
@@ -83,7 +93,9 @@ public class UserService : IUserService
 
     public Result<ICollection<User>> GetAll(Func<User, bool> predicate)
     {
-        var users = _users.Where(predicate).ToList();
+        var usersInStorage = GetUsers().Result;
+
+        var users = usersInStorage.Where(predicate).ToList();
         return Result<ICollection<User>>.Success(users);
     }
 

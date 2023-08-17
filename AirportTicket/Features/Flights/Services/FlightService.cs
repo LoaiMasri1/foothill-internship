@@ -9,43 +9,40 @@ namespace AirportTicket.Features.Flights.Services;
 
 public class FlightService : IFlightService
 {
-    private static readonly List<Flight> _flights;
-    private static readonly Storage _storage = Storage.Instance;
+    private readonly IStorage _storage;
 
-    static FlightService()
+    public FlightService(IStorage storage)
     {
-        _flights = GetFlights().Result;
+        _storage = storage;
     }
-    private static async Task<List<Flight>> GetFlights()
-    {
-        var flights = await _storage.ReadAsync<Flight>();
-        return flights.ToList();
-    }
+
 
 
     public async Task<Result<Flight>> AddAsync(Flight entity)
     {
-
+        var flights = await _storage.ReadAsync<Flight>();
         var validationResult = ValidateFlight(entity);
         if (validationResult.IsFailure)
         {
             return validationResult;
         }
 
-        var isExist = _flights.Any(f => f.FlightId == entity.FlightId);
+        var isExist = flights.Any(f => f.FlightId == entity.FlightId);
         if (isExist)
         {
             return Result<Flight>.Failure(Errors.Flight.FlightAlreadyExists);
         }
 
-        _flights.Add(entity);
-        await _storage.WriteAsync(_flights);
+        flights.Add(entity);
+        await _storage.WriteAsync(flights);
         return Result<Flight>.Success(entity);
     }
 
     public Result<Flight?> Get(Func<Flight, bool> predicate)
     {
-        var flight = _flights.FirstOrDefault(predicate);
+        var flights = _storage.ReadAsync<Flight>().Result;
+
+        var flight = flights.FirstOrDefault(predicate);
         if (flight is null)
         {
             return Result<Flight?>.Failure(Errors.Flight.FlightNotFound);
@@ -56,18 +53,20 @@ public class FlightService : IFlightService
 
     public Result<ICollection<Flight>> GetAll()
     {
-        return Result<ICollection<Flight>>.Success(_flights);
+        return Result<ICollection<Flight>>.Success(_storage.ReadAsync<Flight>().Result);
     }
 
     public Result<Flight> Update(Guid flightId, Flight entity)
     {
+
+        var flights = _storage.ReadAsync<Flight>().Result;
         var validationResult = ValidateFlight(entity);
         if (validationResult.IsFailure)
         {
             return validationResult;
         }
 
-        var flight = _flights.FirstOrDefault(f => f.FlightId == flightId);
+        var flight = flights.FirstOrDefault(f => f.FlightId == flightId);
         if (flight is null)
         {
             return Result<Flight>.Failure(Errors.Flight.FlightNotFound);
@@ -76,7 +75,7 @@ public class FlightService : IFlightService
         flight.Destination = entity.Destination ?? flight.Destination;
         flight.Departure = entity.Departure ?? flight.Departure;
         flight.AvailableSeats = entity.AvailableSeats == 0 ? flight.AvailableSeats : entity.AvailableSeats;
-        _storage.WriteAsync(_flights).Wait();
+        _storage.WriteAsync(flights).Wait();
         return Result<Flight>.Success(flight);
     }
 
@@ -126,12 +125,14 @@ public class FlightService : IFlightService
 
     public Result<ICollection<Flight>> GetAll(Func<Flight, bool> predicate)
     {
-        var flights = _flights.Where(predicate).ToList();
-        if (flights.Count == 0)
+        var flights = _storage.ReadAsync<Flight>().Result;
+
+        var Allflights = flights.Where(predicate).ToList();
+        if (Allflights.Count == 0)
         {
             return Result<ICollection<Flight>>.Failure(Errors.Flight.FlightNotFound);
         }
 
-        return Result<ICollection<Flight>>.Success(flights);
+        return Result<ICollection<Flight>>.Success(Allflights);
     }
 }
