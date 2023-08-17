@@ -1,37 +1,27 @@
-﻿using AirportTicket.Common.Constants;
+﻿using AirportTicket.Common;
+using AirportTicket.Common.Constants;
 using AirportTicket.Common.Helper;
 using AirportTicket.Common.Models;
-using AirportTicket.Common;
 using AirportTicket.Core;
 using AirportTicket.Features.Bookings.Models;
-using AirportTicket.Features.Flights.Services;
 using AirportTicket.Features.Flights.Models;
+using AirportTicket.Features.Flights.Services;
 
 namespace AirportTicket.Features.Bookings.Services;
 
 public class BookingService : IBookingService
 {
-    private static readonly List<Booking> _bookings;
-    private readonly FlightService _flightService;
-    private static readonly Storage _storage = Storage.Instance;
+    private readonly IFlightService _flightService;
+    private readonly IStorage _storage;
 
-    static BookingService()
+    public BookingService(IFlightService flightService, IStorage storage)
     {
-        _bookings = GetBookings().Result;
-    }
-
-    public BookingService()
-    {
-        _flightService = new FlightService();
-    }
-
-    private static async Task<List<Booking>> GetBookings()
-    {
-        var bookings = await _storage.ReadAsync<Booking>();
-        return bookings.ToList();
+        _flightService = flightService;
+        _storage = storage;
     }
     public async Task<Result<Booking>> AddAsync(Booking entity)
     {
+        var booking = await _storage.ReadAsync<Booking>();
 
         var validationResult = ValidationHelper.Validate(
             entity,
@@ -41,7 +31,7 @@ public class BookingService : IBookingService
             return validationResult;
         }
 
-        var isExist = _bookings.Any(IsMatchingBooking(entity));
+        var isExist = booking.Any(IsMatchingBooking(entity));
         if (isExist)
         {
             return Result<Booking>.Failure(Errors.Booking.BookingAlreadyExists);
@@ -66,15 +56,17 @@ public class BookingService : IBookingService
         DecreaseFlightAvailableSeatsIfExist(entity.Flight.FlightId);
 
 
-        _bookings.Add(entity);
+        booking.Add(entity);
 
-        await _storage.WriteAsync(_bookings);
+        await _storage.WriteAsync(booking);
         return Result<Booking>.Success(entity);
     }
 
     public async Task<Result<Booking>> DeleteAsync(Guid id)
     {
-        var booking = _bookings.FirstOrDefault(b => b.Id == id);
+        var bookings = await _storage.ReadAsync<Booking>();
+
+        var booking = bookings.FirstOrDefault(b => b.Id == id);
         if (booking is null)
         {
             return Result<Booking>.Failure(Errors.Booking.BookingNotFound);
@@ -82,16 +74,18 @@ public class BookingService : IBookingService
 
         IncreaseFlightAvailableSeats(booking.Flight.FlightId);
 
-        _bookings.Remove(booking);
+        bookings.Remove(booking);
 
-        await _storage.WriteAsync(_bookings);
+        await _storage.WriteAsync(bookings);
 
         return Result<Booking>.Success(booking);
     }
 
     public Result<Booking?> Get(Func<Booking, bool> predicate)
     {
-        var booking = _bookings.FirstOrDefault(predicate);
+        var bookings = _storage.ReadAsync<Booking>().Result;
+
+        var booking = bookings.FirstOrDefault(predicate);
         return booking is null
             ? Result<Booking?>.Failure(Errors.Booking.BookingNotFound)
             : Result<Booking?>.Success(booking);
@@ -99,12 +93,15 @@ public class BookingService : IBookingService
 
     public Result<ICollection<Booking>> GetAll()
     {
-        return Result<ICollection<Booking>>.Success(_bookings);
+        var bookings = _storage.ReadAsync<Booking>().Result;
+
+        return Result<ICollection<Booking>>.Success(bookings);
     }
 
     public Result<ICollection<Booking>> GetAll(Func<Booking, bool> predicate)
     {
-        var bookings = _bookings.Where(predicate).ToList();
+        var bookingsInStore = _storage.ReadAsync<Booking>().Result;
+        var bookings = bookingsInStore.Where(predicate).ToList();
         return bookings.Any()
             ? Result<ICollection<Booking>>.Success(bookings)
             : Result<ICollection<Booking>>.Failure(Errors.Booking.BookingNotFound);
@@ -112,6 +109,8 @@ public class BookingService : IBookingService
 
     public Result<Booking> Update(Guid id, Booking entity)
     {
+        var bookings = _storage.ReadAsync<Booking>().Result;
+
         var validationResult = ValidationHelper.Validate(
             entity,
             Errors.Booking.BookingNotValid);
@@ -120,7 +119,7 @@ public class BookingService : IBookingService
             return validationResult;
         }
 
-        var booking = _bookings.FirstOrDefault(b => b.Id == id);
+        var booking = bookings.FirstOrDefault(b => b.Id == id);
         if (booking is null)
         {
             return Result<Booking>.Failure(Errors.Booking.BookingNotFound);
@@ -142,7 +141,7 @@ public class BookingService : IBookingService
         booking.TotalPrice = flight!.Price + entity.ClassInfo.Price;
 
 
-        _storage.WriteAsync(_bookings).Wait();
+        _storage.WriteAsync(bookings).Wait();
 
         return Result<Booking>.Success(entity);
     }
