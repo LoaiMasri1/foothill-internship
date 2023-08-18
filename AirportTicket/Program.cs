@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using AirportTicket.Common.Helper.Menus;
+
+var appMenu = new AppMenu();
+await appMenu.Handle();
