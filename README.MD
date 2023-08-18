@@ -5,3 +5,8 @@
 ## Tasks:
 - [] Get a 35-40 WPM typing speed with touch typing.
 - [x] Learn Git.
+
+<hr/>
+
+### Write Unit Tests for Airport Ticket Booking project done in c#
+### Write Unit Tests for Real-time weather monitoring and reporting service project
