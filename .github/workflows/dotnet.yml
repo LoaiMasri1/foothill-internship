@@ -1,0 +1,49 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "tests" ]
+  pull_request:
+    branches: [ "tests" ]
+    paths:
+      - '**.cs'
+      - '**.csproj'
+
+env:
+  DOTNET_VERSION: '7.0.100'
+
+jobs:
+  build-and-test:
+
+    name: Build and Test ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build AirportTicket
+        working-directory: ./AirportTicket
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test AirportTicket
+        working-directory: ./AirportTicket
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: Build WeatherApp
+        working-directory: ./WeatherApp
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test WeatherApp
+        working-directory: ./WeatherApp
+        run: dotnet test --no-restore --verbosity normal
