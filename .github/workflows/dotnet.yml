@@ -29,7 +29,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install dependencies
+      - name: Install AirportTicket dependencies
+        working-directory: ./AirportTicket
         run: dotnet restore
 
       - name: Build AirportTicket
@@ -39,6 +40,10 @@ jobs:
       - name: Test AirportTicket
         working-directory: ./AirportTicket
         run: dotnet test --no-restore --verbosity normal
+
+      - name: Install WeatherApp dependencies
+        working-directory: ./WeatherApp
+        run: dotnet restore
 
       - name: Build WeatherApp
         working-directory: ./WeatherApp
