@@ -1,0 +1,4 @@
+FlightId,Departure.Id,Departure.Country,Departure.Date,Departure.Airport,Destination.Country,Destination.Airport,AvailableSeats,Price
+b6fcee2b-4e8b-4d3d-ba28-6cb71e1083f1,753b5b9e-9689-4a4c-a14f-79954b0c6f9f,USA,2000-08-15,New York,France,Paris,200,500.00
+a0e01baf-dfc2-4e2a-981a-7e38d6a4ce8a,0497f2d8-8926-4ce3-ba0e-e94ea7c4081a,UK,2023-09-20,London,Spain,Madrid,150,400.50
+d25cfca2-4f52-46f3-b318-2c76313e86e5,a930c7fb-62b1-4d0b-823c-8497cdd9ee07,Canada,2023-10-10,Toronto,Germany,Berlin,100,700.25
