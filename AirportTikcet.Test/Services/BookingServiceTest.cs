@@ -118,7 +118,7 @@ public class BookingServiceTest
     }
 
     [Fact]
-    public void Update_BookingExists_Success()
+    public async Task Update_BookingExists_Success()
     {
         // Arrange
         _storage.Setup(s => s.ReadAsync<Booking>())
@@ -132,7 +132,7 @@ public class BookingServiceTest
             .Returns(Result<Flight?>.Success(_booking.Flight));
 
         // Act
-        var result = _bookingService.Update(_booking.Id, _booking);
+        var result = await _bookingService.Update(_booking.Id, _booking);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -140,7 +140,7 @@ public class BookingServiceTest
     }
 
     [Fact]
-    public void Update_BookingNotExist_ShouldFail()
+    public async Task Update_BookingNotExist_ShouldFail()
     {
         // Arrange
         _storage.Setup(s => s.ReadAsync<Booking>())
@@ -154,11 +154,12 @@ public class BookingServiceTest
             .Returns(Result<Flight?>.Success(_booking.Flight));
 
         // Act
-        var result = _bookingService.Update(_booking.Id, _booking);
+        var result = await _bookingService.Update(_booking.Id, _booking);
 
         // Assert
         Assert.True(result.IsFailure);
         Assert.Equal(Errors.Booking.BookingNotFound.Code,
             result.Error.Code);
+
     }
 }

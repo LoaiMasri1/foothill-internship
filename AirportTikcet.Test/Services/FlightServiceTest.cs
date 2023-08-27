@@ -135,13 +135,13 @@ public class FlightServiceTests
     }
 
     [Fact]
-    public void UpdateAsync__FlightDoesNotExist_ShouldFail()
+    public async Task UpdateAsync__FlightDoesNotExist_ShouldFail()
     {
         // Arrange
         _storage.Setup(s => s.ReadAsync<Flight>()).ReturnsAsync(new List<Flight>());
 
         // Act
-        var result = _flightService.Update(It.IsAny<Guid>(), _flight);
+        var result = await  _flightService.Update(It.IsAny<Guid>(), _flight);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -151,14 +151,14 @@ public class FlightServiceTests
     }
 
     [Fact]
-    public void UpdateAsync_FlighExist_ShouldUpdate()
+    public async Task UpdateAsync_FlighExist_ShouldUpdate()
     {
         // Arrange
         _storage.Setup(s => s.ReadAsync<Flight>()).ReturnsAsync(new List<Flight> { _flight });
         _storage.Setup(s => s.WriteAsync(It.IsAny<ICollection<Flight>>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = _flightService.Update(_flight.FlightId, _flight);
+        var result = await _flightService.Update(_flight.FlightId, _flight);
 
         // Assert
         Assert.True(result.IsSuccess);

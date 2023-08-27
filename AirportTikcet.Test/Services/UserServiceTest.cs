@@ -139,14 +139,15 @@ public class UserServiceTest
     }
 
     [Fact]
-    public void Update_ShouldReturnCorrectResult()
+    public async Task Update_ShouldReturnCorrectResult()
     {
         // Arrange
         var user = _user;
         _storage.Setup(s => s.WriteAsync(It.IsAny<ICollection<User>>())).Returns(Task.CompletedTask);
         // Act
 
-        var result = _userService.Update(user.Id, user);
+        user.Email = "hello@test.com";
+        var result = await _userService.Update(user.Id, user);
 
         // Assert
         Assert.True(result.IsSuccess);

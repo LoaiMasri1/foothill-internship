@@ -47,7 +47,7 @@ public class UserService : IUserService
     public Result<User?> Get(Func<User, bool> predicate)
     {
         var users = GetUsers().Result;
-
+        
         var user = users.FirstOrDefault(predicate);
         if (user is null)
         {
@@ -63,7 +63,7 @@ public class UserService : IUserService
         return Result<ICollection<User>>.Success(users);
     }
 
-    public Result<User> Update(Guid Id, User entity)
+    public async Task<Result<User>> Update(Guid Id, User entity)
     {
         var users  = GetUsers().Result;
 
@@ -79,10 +79,10 @@ public class UserService : IUserService
         {
             return Result<User>.Failure(Errors.User.UserNotFound);
         }
-        user.Name = entity.Name;
-        user.Password = entity.Password;
-        user.Email = entity.Email;
-        user.Role = entity.Role;
+
+
+        await _storage.WriteAsync(users);
+
         return Result<User>.Success(user);
     }
 

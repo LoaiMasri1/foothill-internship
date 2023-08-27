@@ -56,7 +56,7 @@ public class FlightService : IFlightService
         return Result<ICollection<Flight>>.Success(_storage.ReadAsync<Flight>().Result);
     }
 
-    public Result<Flight> Update(Guid flightId, Flight entity)
+    public async Task<Result<Flight>> Update(Guid flightId, Flight entity)
     {
 
         var flights = _storage.ReadAsync<Flight>().Result;
@@ -75,7 +75,7 @@ public class FlightService : IFlightService
         flight.Destination = entity.Destination ?? flight.Destination;
         flight.Departure = entity.Departure ?? flight.Departure;
         flight.AvailableSeats = entity.AvailableSeats == 0 ? flight.AvailableSeats : entity.AvailableSeats;
-        _storage.WriteAsync(flights).Wait();
+        await _storage.WriteAsync(flights);
         return Result<Flight>.Success(flight);
     }
 

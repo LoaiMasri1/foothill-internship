@@ -107,7 +107,7 @@ public class BookingService : IBookingService
             : Result<ICollection<Booking>>.Failure(Errors.Booking.BookingNotFound);
     }
 
-    public Result<Booking> Update(Guid id, Booking entity)
+    public async Task<Result<Booking>> Update(Guid id, Booking entity)
     {
         var bookings = _storage.ReadAsync<Booking>().Result;
 
@@ -141,7 +141,7 @@ public class BookingService : IBookingService
         booking.TotalPrice = flight!.Price + entity.ClassInfo.Price;
 
 
-        _storage.WriteAsync(bookings).Wait();
+        await _storage.WriteAsync(bookings);
 
         return Result<Booking>.Success(entity);
     }
