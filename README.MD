@@ -67,7 +67,6 @@ Design and implement a relational database using MS SQL that supports the librar
 - Seed with fictional data: Populate 1000 books, 1000 borrowers, and 1000 loan records. **Include DML scripts for seeding** in the GitHub repository. (Try generating the data by yourself and make sure it is consistent and preferably d. You may use some websites, tools, or scripts to generate this data).
 
 ### **4. Complex Queries and Procedures**:
-https://drawsql.app/teams/loai-1/diagrams/library-management-system/embed
 <aside>
 ⚠️ **Note**: Each of the following requirements should be implemented in a separate SQL file and pushed to the GitHub repository in a distinct commit.
 
