@@ -1,4 +1,3 @@
-
 CREATE PROCEDURE sp_AddNewBorrower4
 	@Id INT,
     @FirstName NVARCHAR(50),
