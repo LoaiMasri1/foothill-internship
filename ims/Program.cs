@@ -1,19 +1,20 @@
 ﻿using ims.Helper;
 using ims.Providers;
 using ims.Repositories;
-using System.Configuration;
-
+using Microsoft.Extensions.Configuration;
 class Program
 {
-    private static readonly ConnectionStringSettings connectionStringSettings =
-        ConfigurationManager.ConnectionStrings["foothill"] ??
-        throw new ConfigurationErrorsException("foothill connection string not found");
+    private static readonly IConfiguration configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .Build();
 
-    private static readonly IProductRepository productRepository = 
+    private static readonly string _connectionString = configuration.GetConnectionString("DefaultConnection")!;
+
+    private static readonly IProductRepository productRepository =
         new ProductRepository(
-               connectionStringSettings.ConnectionString);
+               _connectionString);
 
-    private static readonly IInventoryProvider inventoryProvider = 
+    private static readonly IInventoryProvider inventoryProvider =
         new InventoryProvider(productRepository);
     private static readonly AppMenu _appMenu = new(inventoryProvider);
 
