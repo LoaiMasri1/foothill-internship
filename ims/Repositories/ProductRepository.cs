@@ -1,5 +1,5 @@
 ﻿using ims.Models;
-using MySql.Data.MySqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace ims.Repositories;
 
@@ -85,7 +85,7 @@ public class ProductRepository : IProductRepository
         return result;
     }
 
-    private static T ReadFromReader<T>(MySqlDataReader reader)
+    private static T ReadFromReader<T>(SqlDataReader reader)
     {
         var properties = typeof(T).GetProperties();
         var instance = Activator.CreateInstance<T>();
@@ -107,11 +107,11 @@ public class ProductRepository : IProductRepository
 
     private bool Excuter(
     string query,
-    Action<MySqlCommand>? addParameters = null)
+    Action<SqlCommand>? addParameters = null)
     {
-        using var connection = new MySqlConnection(_connectionString);
+        using var connection = new SqlConnection(_connectionString);
 
-        using var command = new MySqlCommand(query, connection);
+        using var command = new SqlCommand(query, connection);
         addParameters?.Invoke(command);
 
         connection.Open();
@@ -123,12 +123,12 @@ public class ProductRepository : IProductRepository
 
     private ICollection<T> Excuter<T>(
         string query,
-        Action<MySqlCommand>? addParameters = null)
+        Action<SqlCommand>? addParameters = null)
     {
 
-        using var connection = new MySqlConnection(_connectionString);
+        using var connection = new SqlConnection(_connectionString);
 
-        using var command = new MySqlCommand(query, connection);
+        using var command = new SqlCommand(query, connection);
         addParameters?.Invoke(command);
 
         connection.Open();
