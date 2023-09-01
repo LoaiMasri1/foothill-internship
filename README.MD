@@ -55,16 +55,13 @@ Open the project in Visual Studio
 Add the configuration file
 
 ```bash
-Add a new file named "App.config" to the project directory
+Add a new file named "appsettings.json" to the project directory
 
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
- <connectionStrings>
-  <add name="foothill"
-    connectionString=<"server=<>;user=<>;password=<>;database=<>">
-    providerName="MySql.Data.MySqlClient" />
- </connectionStrings>
-</configuration>
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=<>;Database=<>;User ID=<>;Password=<>;TrustServerCertificate=True;"
+  }
+}
 ```
 
 Run the project
