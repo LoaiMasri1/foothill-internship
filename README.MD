@@ -1,11 +1,13 @@
 # Foothill Internship (Backend)
 
-### This repository contains all tasks and exercises for the internship program.
+### This repository contains all tasks and exercises for the internship program
 
-## Tasks:
+## Tasks
+
 - [] Get a 35-40 WPM typing speed with touch typing.
 - [x] Learn Git.
 - [x] Simple Inventory Management System using C#
+- [x] Use MYSQL for database.
 
 <hr/>
 
@@ -29,3 +31,44 @@ Here are the main functionalities the system should have:
 For this project, you'll want to create a **`Product`** class with the appropriate properties (name, price, quantity) and methods. You'll also want to create an **`Inventory`** class which maintains a list of **`Product`** objects and provides methods for adding, deleting, and editing products.
 
 This will give you practice with object-oriented programming, basic data structures (like lists), user input/output, control flow, and version control using Git and GitHub.
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/LoaiMasri1/foothill-internship
+```
+
+Go to the project directory
+
+```bash
+  cd foothill-internship/ims
+```
+
+Open the project in Visual Studio
+
+```bash
+  ims.sln
+```
+
+Add the configuration file
+
+```bash
+Add a new file named "App.config" to the project directory
+
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+ <connectionStrings>
+  <add name="foothill"
+    connectionString=<"server=<>;user=<>;password=<>;database=<>">
+    providerName="MySql.Data.MySqlClient" />
+ </connectionStrings>
+</configuration>
+```
+
+Run the project
+
+```bash
+  F5
+```

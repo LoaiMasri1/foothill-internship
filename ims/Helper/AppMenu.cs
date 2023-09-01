@@ -5,7 +5,11 @@ using ims.Providers;
 namespace ims.Helper;
 public class AppMenu
 {
-    private readonly static InventoryProvider _inventoryProvider;
+    private readonly IInventoryProvider _inventoryProvider;
+    public AppMenu(IInventoryProvider inventoryProvider)
+    {
+        _inventoryProvider = inventoryProvider;
+    }
     private static readonly string[] _menu = new string[]
         {
         "1. Add Product",
@@ -15,11 +19,8 @@ public class AppMenu
         "5. Get Product",
         "6. Exit"
         };
-    static AppMenu()
-    {
-        _inventoryProvider = InventoryProvider.GetInstance();
-    }
-    private static void AddProduct()
+
+    private void AddProduct()
     {
 
         Console.WriteLine("Enter Product Name:");
@@ -49,7 +50,7 @@ public class AppMenu
         }
     }
 
-    private static void UpdateProduct()
+    private void UpdateProduct()
     {
         Console.WriteLine("Enter Product Name to update:");
         var name = Console.ReadLine()!;
@@ -78,7 +79,7 @@ public class AppMenu
         }
     }
 
-    private static void DeleteProduct()
+    private void DeleteProduct()
     {
         Console.WriteLine("Enter Product Name to delete:");
         var name = Console.ReadLine()!;
@@ -94,7 +95,7 @@ public class AppMenu
         }
     }
 
-    private static void ListProducts()
+    private void ListProducts()
     {
         var products = _inventoryProvider.GetProducts();
         if (products.Count == 0)
@@ -106,7 +107,7 @@ public class AppMenu
         products.ToList().ForEach(Console.WriteLine);
     }
 
-    private static void GetProduct()
+    private void GetProduct()
     {
         Console.WriteLine("Enter Product Name to get:");
         var productName = Console.ReadLine()!;
@@ -138,7 +139,7 @@ public class AppMenu
         _menu.ToList().ForEach(Console.WriteLine);
     }
 
-    public static void ProcessOption(string option)
+    public void ProcessOption(string option)
     {
         switch (option)
         {

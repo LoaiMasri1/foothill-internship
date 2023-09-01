@@ -1,45 +1,31 @@
 using ims.Helper.Exceptions;
 using static ims.Helper.Exceptions.Constants.Messages;
 using ims.Models;
+using ims.Repositories;
 
 namespace ims.Providers;
 
 public class InventoryProvider : IInventoryProvider
 {
-    private ICollection<Product> Products { get; init; }
-    private static InventoryProvider? _instance;
+    private readonly IProductRepository _productRepository;
 
-    private InventoryProvider()
+    public InventoryProvider(IProductRepository productRepository)
     {
-        Products = new List<Product>();
+        _productRepository = productRepository;
     }
-
-    public static InventoryProvider GetInstance()
-    {
-        _instance ??= new InventoryProvider();
-
-        return _instance;
-    }
-
 
     public bool AddProduct(Product product)
     {
         var exist = IsProductExists(product.Name);
+
         if (exist)
         {
             throw new AlreadyExistException(string.Format(ProductAlreadyExist, product.Name));
         }
 
-        var newProduct = new Product
-        {
-            Name = product.Name.ToLower(),
-            Price = product.Price,
-            Quantity = product.Quantity
-        };
+        var result = _productRepository.Create(product);
 
-        Products.Add(newProduct);
-
-        return true;
+        return result;
     }
 
     public bool DeleteProduct(string productName)
@@ -50,10 +36,9 @@ public class InventoryProvider : IInventoryProvider
             throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
-        var product = GetProduct(productName);
-        Products.Remove(product!);
+        var result = _productRepository.Delete(productName);
 
-        return true;
+        return result;
     }
 
     public Product? GetProduct(string productName)
@@ -64,15 +49,17 @@ public class InventoryProvider : IInventoryProvider
             throw new NotFoundException(string.Format(ProductDoesNotExist, productName));
         }
 
-        var product = Products.FirstOrDefault(p => p.Name == productName.ToLower());
+        var product = _productRepository.Get(productName);
+
         return product;
     }
 
     public ICollection<Product> GetProducts()
     {
-        var products = new List<Product>(Products);
+        var products = _productRepository.GetAll();
         return products;
     }
+
 
     public bool UpdateProduct(string productName, Product product)
     {
@@ -93,16 +80,15 @@ public class InventoryProvider : IInventoryProvider
             throw new AlreadyExistException(string.Format(ProductAlreadyExist, product.Name));
         }
 
-        productToUpdate.Name = product.Name;
-        productToUpdate.Price = product.Price;
-        productToUpdate.Quantity = product.Quantity;
+        var result = _productRepository.Update(product);
 
-        return true;
+        return result;
     }
 
     public bool IsProductExists(string productName)
     {
-        var exist = Products.Any(p => p.Name == productName.ToLower());
-        return exist;
+        var result = _productRepository.IsExists(productName);
+
+        return result;
     }
 }
