@@ -1,15 +1,36 @@
 ﻿using ims.Helper;
+using ims.Providers;
+using ims.Repositories;
+using System.Configuration;
 
-while (true)
+class Program
 {
-    AppMenu.ShowMenuOptions();
+    private static readonly ConnectionStringSettings connectionStringSettings =
+        ConfigurationManager.ConnectionStrings["foothill"] ??
+        throw new ConfigurationErrorsException("foothill connection string not found");
 
-    var option = Console.ReadLine();
-    if (option is null || option == string.Empty)
+    private static readonly IProductRepository productRepository = 
+        new ProductRepository(
+               connectionStringSettings.ConnectionString);
+
+    private static readonly IInventoryProvider inventoryProvider = 
+        new InventoryProvider(productRepository);
+    private static readonly AppMenu _appMenu = new(inventoryProvider);
+
+    static void Main(string[] args)
     {
-        Console.WriteLine("Please enter a valid option");
-        continue;
-    }
+        while (true)
+        {
+            AppMenu.ShowMenuOptions();
 
-    AppMenu.ProcessOption(option);
+            var option = Console.ReadLine();
+            if (option is null || option == string.Empty)
+            {
+                Console.WriteLine("Please enter a valid option");
+                continue;
+            }
+
+            _appMenu.ProcessOption(option);
+        }
+    }
 }
