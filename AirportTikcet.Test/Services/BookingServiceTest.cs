@@ -108,13 +108,12 @@ public class BookingServiceTest
         _storage.Setup(s => s.ReadAsync<Booking>()).ReturnsAsync(new List<Booking> { _booking });
 
         // Act
-        var result = _bookingService.Get(b => b.Id == Guid.NewGuid());
+        var result = _bookingService.Get(b => b.BookingId == Guid.NewGuid());
 
         // Assert
         Assert.True(result.IsFailure);
-        Assert.Equal(
-                                  Errors.Booking.BookingNotFound.Code,
-                                                                   result.Error.Code);
+        Assert.Equal(Errors.Booking.BookingNotFound.Code
+            ,result.Error.Code);
     }
 
     [Fact]
@@ -132,7 +131,7 @@ public class BookingServiceTest
             .Returns(Result<Flight?>.Success(_booking.Flight));
 
         // Act
-        var result = await _bookingService.Update(_booking.Id, _booking);
+        var result = await _bookingService.Update(_booking.BookingId, _booking);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -154,7 +153,7 @@ public class BookingServiceTest
             .Returns(Result<Flight?>.Success(_booking.Flight));
 
         // Act
-        var result = await _bookingService.Update(_booking.Id, _booking);
+        var result = await _bookingService.Update(_booking.BookingId, _booking);
 
         // Assert
         Assert.True(result.IsFailure);

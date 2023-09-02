@@ -147,7 +147,7 @@ public class UserServiceTest
         // Act
 
         user.Email = "hello@test.com";
-        var result = await _userService.Update(user.Id, user);
+        var result = await _userService.Update(user.UserId, user);
 
         // Assert
         Assert.True(result.IsSuccess);

@@ -1,5 +1,6 @@
 ﻿using AirportTicket.Common;
 using AirportTicket.Common.Constants;
+using AirportTicket.Core;
 using AirportTicket.Features.Auth;
 using AirportTicket.Features.Users.Models;
 using AirportTicket.Features.Users.Services;
@@ -10,13 +11,17 @@ public class AuthServiceTest
 {
     private readonly IFixture _fixture;
     private readonly Mock<IUserService> _userServiceMock;
+    private readonly Mock<IStorage> _storage;
     private readonly AuthService _authService;
 
     public AuthServiceTest()
     {
         _fixture = new Fixture();
         _userServiceMock = new Mock<IUserService>();
-        _authService = new AuthService(_userServiceMock.Object);
+        _storage = new Mock<IStorage>();
+        _storage.Setup(x => x.ReadAsync<User>())
+            .ReturnsAsync(new List<User>());
+        _authService = new AuthService(_userServiceMock.Object,_storage.Object);
 
         _userServiceMock
             .Setup(x => x.AddAsync(It.IsAny<User>()))
