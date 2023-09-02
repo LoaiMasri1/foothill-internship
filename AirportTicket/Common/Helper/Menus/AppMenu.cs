@@ -9,13 +9,13 @@ namespace AirportTicket.Common.Helper.Menus;
 
 public class AppMenu
 {
-    private readonly IStorage _storage = Storage.GetInstance();
+    private readonly IStorage _storage = MongoStorage.Instance;
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
     public AppMenu()
     {
         _userService = new UserService(_storage);
-        _authService = new AuthService(_userService);    
+        _authService = new AuthService(_userService,_storage);    
     }
 
     private static void Show()

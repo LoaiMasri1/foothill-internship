@@ -1,13 +1,14 @@
-﻿using AirportTicket.Common.CustomAttribute;
+﻿using AirportTicket.Common;
+using AirportTicket.Common.CustomAttribute;
 using AirportTicket.Features.Flights.Models;
 using AirportTicket.Features.Users.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace AirportTicket.Features.Bookings.Models;
 
-public class Booking
+public class Booking : BsonEntityID
 {
-    public Guid Id { get; set; }
+    public Guid BookingId { get; set; }
     public User Passenger { get; set; } = null!;
     public Flight Flight { get; set; } = null!;
     [Required(ErrorMessage = "DateUtc is required.")]
@@ -27,7 +28,7 @@ public class Booking
     {
         var booking = new Booking
         {
-            Id = Guid.NewGuid(),
+            BookingId = Guid.NewGuid(),
             Passenger = passenger,
             Flight = flight,
             DateUtc = dateUtc,
@@ -39,5 +40,5 @@ public class Booking
     }
 
     public override string ToString() =>
-        $"Booking {Id} for {Passenger.Id} on {Flight.FlightId} for {TotalPrice}";
+        $"Booking {BookingId} for {Passenger.UserId} on {Flight.FlightId} for {TotalPrice}";
 }

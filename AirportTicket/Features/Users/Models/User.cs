@@ -1,10 +1,13 @@
-﻿using AirportTicket.Features.Users.Models.Enums;
+﻿using AirportTicket.Common;
+using AirportTicket.Features.Users.Models.Enums;
+
 using System.ComponentModel.DataAnnotations;
 
 namespace AirportTicket.Features.Users.Models;
-public class User
+public class User : BsonEntityID
 {
-    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+
 
     [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
@@ -22,13 +25,13 @@ public class User
 
 
     public User(
-        Guid id,
+        Guid userId,
         string name,
         string password,
         string email,
         UserRole role)
     {
-        Id = id;
+        UserId = userId;
         Name = name;
         Password = password;
         Email = email;
@@ -53,7 +56,7 @@ public class User
 
     public override string ToString()
     {
-        return $"Id: {Id}, Name: {Name}, Email: {Email}, Role: {Role}";
+        return $"Id: {UserId}, Name: {Name}, Email: {Email}, Role: {Role}";
     }
 
 }

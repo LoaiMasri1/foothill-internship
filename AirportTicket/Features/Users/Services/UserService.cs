@@ -74,7 +74,7 @@ public class UserService : IUserService
         }
 
 
-        var user = users.FirstOrDefault(p => p.Id == entity.Id);
+        var user = users.FirstOrDefault(p => p.UserId == entity.UserId);
         if (user == null)
         {
             return Result<User>.Failure(Errors.User.UserNotFound);

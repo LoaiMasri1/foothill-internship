@@ -14,7 +14,7 @@ namespace AirportTicket.Common.Helper.Menus;
 
 public class ManagerMenu
 {
-    private static readonly IStorage _storage = Storage.GetInstance();
+    private static readonly IStorage _storage = MongoStorage.Instance;
     private static readonly ICSVReader _csvReader = new CSVReader();
     private static readonly FlightService _flightService = new(_storage);
     private static readonly ImportCSVFileService<Flight, FlightMap>

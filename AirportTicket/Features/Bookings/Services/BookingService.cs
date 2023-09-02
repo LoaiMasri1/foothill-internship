@@ -66,7 +66,7 @@ public class BookingService : IBookingService
     {
         var bookings = await _storage.ReadAsync<Booking>();
 
-        var booking = bookings.FirstOrDefault(b => b.Id == id);
+        var booking = bookings.FirstOrDefault(b => b.BookingId == id);
         if (booking is null)
         {
             return Result<Booking>.Failure(Errors.Booking.BookingNotFound);
@@ -119,7 +119,7 @@ public class BookingService : IBookingService
             return validationResult;
         }
 
-        var booking = bookings.FirstOrDefault(b => b.Id == id);
+        var booking = bookings.FirstOrDefault(b => b.BookingId == id);
         if (booking is null)
         {
             return Result<Booking>.Failure(Errors.Booking.BookingNotFound);

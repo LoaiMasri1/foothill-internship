@@ -10,7 +10,7 @@ namespace AirportTicket.Common.Helper.Menus;
 
 public class PassengerMenu
 {
-    private static readonly IStorage _storage = Storage.GetInstance();
+    private static readonly IStorage _storage = MongoStorage.Instance;
     private static readonly FlightService _flightService = new(_storage);
     private static readonly IBookingService _bookingService = new BookingService(_flightService, _storage);
 
@@ -120,7 +120,7 @@ public class PassengerMenu
         }
 
         var bookingToDelete = bookings[bookingId];
-        var deleteResult = await _bookingService.DeleteAsync(bookingToDelete.Id);
+        var deleteResult = await _bookingService.DeleteAsync(bookingToDelete.BookingId);
 
         if (deleteResult.IsFailure)
         {

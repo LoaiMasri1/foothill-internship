@@ -9,10 +9,11 @@ namespace AirportTicket.Features.Auth;
 public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
-    private static readonly IStorage _storage = Storage.GetInstance();
-    public AuthService(IUserService userService)
+    private readonly IStorage _storage;
+    public AuthService(IUserService userService, IStorage storage)
     {
         _userService = userService;
+        _storage = storage;
     }
 
     public async Task<Result<User>> RegisterAsync(User user)
