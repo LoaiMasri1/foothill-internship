@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
@@ -81,4 +82,14 @@ public class ResturantService
         _context.Resturants.Remove(resturant);
         await _context.SaveChangesAsync();
     }
+
+    public decimal CalculateRestaurantRevenueAsync(int resturantId)
+    {
+        var revenue = _context.Resturants
+            .Select(r => _context.CalculateRestaurantRevenue(resturantId))
+            .FirstOrDefault();
+
+        return revenue;
+    }
+
 }

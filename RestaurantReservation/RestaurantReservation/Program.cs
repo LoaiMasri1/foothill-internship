@@ -57,6 +57,11 @@ class Program
         view.ForEach(x => Console.WriteLine(
             $@"{x.ReservationId},{x.ReservationDate},{x.PartySize},{x.CustomerId},{x.CustomerFirstName},{x.CustomerLastName},{x.CustomerEmail},{x.RestaurantId},{x.RestaurantName},{x.RestaurantAddress},{x.RestaurantPhoneNumber},{x.RestaurantOpeningHours}"
             ));
+
+        var revenue =  resturantService.CalculateRestaurantRevenueAsync(1);
+        Console.WriteLine($"Revenue: {revenue}");
+
+
     }
 
     private static async Task TestCreatedService()
@@ -82,7 +87,6 @@ class Program
             Order Item Id: {orderItemId}
             ");
     }
-
     private async static Task<int> CreateOrderItemAsync(int menuItemId, int orderId)
     {
         var orderItemRequest = new OrderItemRequest(
@@ -94,7 +98,6 @@ class Program
 
         return orderItem.Id;
     }
-
     private async static Task<int> CreateOrderAsync(int reservationId, int employeeId)
     {
         var orderRequest = new OrderRequest(
@@ -108,7 +111,6 @@ class Program
         return order.Id;
 
     }
-
     private async static Task<int> CreateReservationAsync(int customerId, int tableId, int resturantId)
     {
         var reservationRequest = new ReservationRequest(
@@ -122,7 +124,6 @@ class Program
 
         return reservation.Id;
     }
-
     private async static Task<int> CreateEmployeeAsync(int resturantId)
     {
         var employeeRequest = new EmployeeRequest(
@@ -134,7 +135,6 @@ class Program
         var employee = await employeeService.CreateEmployeeAsync(employeeRequest);
         return employee.Id;
     }
-
     private async static Task<int> CreateMenuItemAsync(int resturantId)
     {
         var menuItemRequest = new MenuItemRequest(
@@ -149,7 +149,6 @@ class Program
         return menuItem.Id;
 
     }
-
     private async static Task<int> CreateTableAsync(int resturantId)
     {
         var tableRequest = new TableRequest(resturantId, 4);
@@ -158,7 +157,6 @@ class Program
 
         return table.Id;
     }
-
     private async static Task<int> CreateResturantAsync()
     {
         var resturantRequest = new ResturantRequest(
@@ -172,7 +170,6 @@ class Program
 
         return resturant.Id;
     }
-
     private async static Task<int> CreateCustomerAsync()
     {
         var customerRequest = new CustomerRequest(
