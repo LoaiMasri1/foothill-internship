@@ -17,6 +17,19 @@ class Program
 
     public async static Task Main()
     {
+        bool wantToTest = false;
+        if (wantToTest)
+        {
+            await TestCreatedService();
+        }
+
+        var managers = await employeeService.ListManagersAsync();
+
+        managers.ToList().ForEach(x => Console.WriteLine($"{x.Id},{x.FirstName},{x.LastName}"));
+    }
+
+    private static async Task TestCreatedService()
+    {
         var customerId = await CreateCustomerAsync();
         var resturantId = await CreateResturantAsync();
         var tableId = await CreateTableAsync(resturantId);

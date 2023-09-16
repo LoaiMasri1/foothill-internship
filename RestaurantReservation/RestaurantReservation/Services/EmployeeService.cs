@@ -76,4 +76,19 @@ public class EmployeeService
         _context.Employees.Remove(employee);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<EmployeeResponse>> ListManagersAsync() { 
+        var managers = await _context.Employees
+            .Where(x => x.Position == "Manager")
+            .ToListAsync();
+
+        var response = managers.Select(x => new EmployeeResponse(
+            x.EmployeeId,
+            x.ResturantId,
+            x.FirstName,
+            x.LastName,
+            x.Position));
+
+        return response;
+    }
 }
