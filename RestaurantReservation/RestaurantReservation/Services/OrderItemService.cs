@@ -114,4 +114,23 @@ public class OrderItemService
         return response;
     }
 
+    public async Task<IEnumerable<MenuItemResponse>> ListOrderedMenuItemsAsync(int reservationId)
+    {
+        var orderItems = await _context.OrderItems
+            .Include(x => x.Order)
+            .Include(x => x.Item)
+            .Where(x => x.Order.ReservationId == reservationId)
+            .ToListAsync();
+
+        var response = orderItems.Select(x => new MenuItemResponse(
+            x.Item.ItemId,
+            x.Item.ResturantId,
+            x.Item.Name,
+            x.Item.Description,
+            x.Item.Price
+            ));
+
+        return response;
+    }
+
 }

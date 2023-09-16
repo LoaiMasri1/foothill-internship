@@ -40,6 +40,11 @@ class Program
                           MenuItems: {x.MenuItems
                           .Aggregate("", (acc, x) => acc + $@"({x.Id},{x.Name},{x.RestaurantId})")}
                           Quantity: {x.Quantity}"));
+
+        var orderedItems = await orderItemService.ListOrderedMenuItemsAsync(1);
+
+        orderedItems.ToList().
+            ForEach(x => Console.WriteLine($@"{x.Id},{x.Name},{x.RestaurantId},{x.Price}"));
     }
 
     private static async Task TestCreatedService()
