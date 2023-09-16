@@ -45,6 +45,9 @@ class Program
 
         orderedItems.ToList().
             ForEach(x => Console.WriteLine($@"{x.Id},{x.Name},{x.RestaurantId},{x.Price}"));
+
+        var averageOrderAmount = await orderService.CalculateAverageOrderAmountAsync(1);
+        Console.WriteLine($"Average: {averageOrderAmount}");
     }
 
     private static async Task TestCreatedService()

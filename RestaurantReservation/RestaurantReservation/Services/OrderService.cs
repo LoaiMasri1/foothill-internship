@@ -66,4 +66,16 @@ public class OrderService
 
         return response;
     }
+
+    public async Task<double> CalculateAverageOrderAmountAsync(int employeeId)
+    {
+        var orders = await _context.Orders
+            .Where(x => x.EmployeeId == employeeId)
+            .ToListAsync();
+
+        var averageOrderAmount = orders
+            .Average(x => x.TotalAmount);
+
+        return averageOrderAmount;
+    }
 }
