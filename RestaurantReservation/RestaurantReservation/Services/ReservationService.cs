@@ -46,6 +46,7 @@ public class ReservationService
         {
             CustomerId = reservationRequest.CustomerId,
             ResturantId = reservationRequest.RestaurantId,
+            TableId = reservationRequest.TableId,
             ReservationDate = reservationRequest.ReservationDate,
             PartySize = reservationRequest.PartySize
         };
