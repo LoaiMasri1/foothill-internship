@@ -29,6 +29,7 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<Resturant> Resturants { get; set; }
 
     public DbSet<Table> Tables { get; set; }
+    public DbSet<ReservationsView> ReservationsViews { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
         optionsBuilder.UseSqlServer(DbConnectionString);
@@ -213,6 +214,8 @@ public class RestaurantReservationDbContext : DbContext
                 .HasForeignKey(d => d.ResturantId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
+
+        modelBuilder.Entity<ReservationsView>().HasNoKey().ToView(nameof(ReservationsView));
 
         SeedData(modelBuilder);
     }

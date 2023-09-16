@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Db;
 using RestaurantReservation.Services;
 
@@ -48,6 +49,14 @@ class Program
 
         var averageOrderAmount = await orderService.CalculateAverageOrderAmountAsync(1);
         Console.WriteLine($"Average: {averageOrderAmount}");
+
+        var view =context.ReservationsViews
+            .FromSqlRaw("SELECT * FROM ReservationsView")
+            .ToList();
+
+        view.ForEach(x => Console.WriteLine(
+            $@"{x.ReservationId},{x.ReservationDate},{x.PartySize},{x.CustomerId},{x.CustomerFirstName},{x.CustomerLastName},{x.CustomerEmail},{x.RestaurantId},{x.RestaurantName},{x.RestaurantAddress},{x.RestaurantPhoneNumber},{x.RestaurantOpeningHours}"
+            ));
     }
 
     private static async Task TestCreatedService()

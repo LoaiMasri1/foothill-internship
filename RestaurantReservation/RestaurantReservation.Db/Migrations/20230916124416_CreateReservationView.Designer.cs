@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantReservation.Db;
 
@@ -11,9 +12,11 @@ using RestaurantReservation.Db;
 namespace RestaurantReservation.Db.Migrations
 {
     [DbContext(typeof(RestaurantReservationDbContext))]
-    partial class RestaurantReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916124416_CreateReservationView")]
+    partial class CreateReservationView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
 
                     b.HasData(
                         new
@@ -141,7 +144,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("ResturantId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
 
                     b.HasData(
                         new
@@ -221,7 +224,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("ResturantId");
 
-                    b.ToTable("MenuItems", (string)null);
+                    b.ToTable("MenuItems");
 
                     b.HasData(
                         new
@@ -297,7 +300,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("ReservationId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasData(
                         new
@@ -369,7 +372,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
 
                     b.HasData(
                         new
@@ -446,7 +449,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
 
                     b.HasData(
                         new
@@ -544,7 +547,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasKey("ResturantsId");
 
-                    b.ToTable("Resturants", (string)null);
+                    b.ToTable("Resturants");
 
                     b.HasData(
                         new
@@ -610,7 +613,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("ResturantId");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
 
                     b.HasData(
                         new
