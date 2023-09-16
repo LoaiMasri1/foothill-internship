@@ -123,7 +123,7 @@ public class ReservationService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<ICollection<ReservationResponse>> GetReservationsByCustomerAsync(
+    public async Task<IEnumerable<ReservationResponse>> GetReservationsByCustomerAsync(
         int customerId
         )
     {
@@ -137,11 +137,9 @@ public class ReservationService
             x.ResturantId,
             x.TableId,
             x.ReservationDate,
-            x.PartySize)).ToList();
-
+            x.PartySize));
+       
         return response;
-        
-
     }
 
 }
