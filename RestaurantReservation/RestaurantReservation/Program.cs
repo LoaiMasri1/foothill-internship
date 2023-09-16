@@ -24,15 +24,23 @@ class Program
             await TestCreatedService();
         }
 
+        #region List All Managers
+
         var managers = await employeeService.ListManagersAsync();
 
         managers.ToList().ForEach(x => Console.WriteLine($"{x.Id},{x.FirstName},{x.LastName}"));
 
+        #endregion
+
+        #region Get Reservations By Customer
         var reservations = await reservationService.GetReservationsByCustomerAsync(1);
 
         reservations.ToList().ForEach(x => Console.WriteLine(
             $"{x.Id},{x.CustomerId},{x.RestaurantId},{x.TableId},{x.ReservationDate},{x.PartySize}"));
 
+        #endregion
+
+        #region List Orders And MenuItems
         var orders = await orderItemService.ListOrdersAndMenuItemsAsync(1);
 
         orders.ToList().ForEach(x => Console.WriteLine(
@@ -41,27 +49,42 @@ class Program
                           MenuItems: {x.MenuItems
                           .Aggregate("", (acc, x) => acc + $@"({x.Id},{x.Name},{x.RestaurantId})")}
                           Quantity: {x.Quantity}"));
+        #endregion
 
+        #region List Ordered MenuItems
         var orderedItems = await orderItemService.ListOrderedMenuItemsAsync(1);
 
         orderedItems.ToList().
             ForEach(x => Console.WriteLine($@"{x.Id},{x.Name},{x.RestaurantId},{x.Price}"));
+        #endregion
 
+        #region Calculate Average Order Amount
         var averageOrderAmount = await orderService.CalculateAverageOrderAmountAsync(1);
         Console.WriteLine($"Average: {averageOrderAmount}");
+        #endregion
 
-        var view =context.ReservationsViews
+        #region Reservations View
+        var view = context.ReservationsViews
             .FromSqlRaw("SELECT * FROM ReservationsView")
             .ToList();
 
         view.ForEach(x => Console.WriteLine(
             $@"{x.ReservationId},{x.ReservationDate},{x.PartySize},{x.CustomerId},{x.CustomerFirstName},{x.CustomerLastName},{x.CustomerEmail},{x.RestaurantId},{x.RestaurantName},{x.RestaurantAddress},{x.RestaurantPhoneNumber},{x.RestaurantOpeningHours}"
             ));
+        #endregion
 
-        var revenue =  resturantService.CalculateRestaurantRevenueAsync(1);
+
+        #region Database Functions - Calculate Restaurant Revenue
+        var revenue = resturantService.CalculateRestaurantRevenueAsync(1);
         Console.WriteLine($"Revenue: {revenue}");
+        #endregion
 
+        #region Stored Procedures - Find Customers With Large Parties
+        var customers = customerService.GetCustomersWithLargeParties(3);
 
+        customers.ToList().ForEach(x => Console.WriteLine(
+                       $@"{x.Id},{x.FirstName},{x.LastName},{x.Email},{x.PhoneNumber}"));
+        #endregion
     }
 
     private static async Task TestCreatedService()

@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
@@ -68,4 +69,24 @@ public class CustomerService
         _context.Customers.Remove(customer);
         await _context.SaveChangesAsync();
     }
+
+    public IEnumerable<CustomerResponse> GetCustomersWithLargeParties(int minPartySize) 
+    {
+        var customers = _context.Customers
+            .FromSqlRaw($"EXEC FindCustomersWithLargeParties {@minPartySize}", minPartySize)
+            .AsEnumerable();
+
+        var response = customers.Select(x => new CustomerResponse(
+            x.CustomerId,
+            x.FirstName,
+            x.LastName,
+            x.Email,
+            x.PhoneNumber))
+            .ToList();
+
+        return response;
+    }
+
+       
+    
 }
