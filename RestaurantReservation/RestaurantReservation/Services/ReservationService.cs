@@ -123,4 +123,25 @@ public class ReservationService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<ICollection<ReservationResponse>> GetReservationsByCustomerAsync(
+        int customerId
+        )
+    {
+        var reservations = await _context.Reservations
+            .Where(x => x.CustomerId == customerId)
+            .ToListAsync();
+
+        var response = reservations.Select(x => new ReservationResponse(
+            x.ReservationsId,
+            x.CustomerId,
+            x.ResturantId,
+            x.TableId,
+            x.ReservationDate,
+            x.PartySize)).ToList();
+
+        return response;
+        
+
+    }
+
 }

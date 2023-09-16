@@ -26,6 +26,12 @@ class Program
         var managers = await employeeService.ListManagersAsync();
 
         managers.ToList().ForEach(x => Console.WriteLine($"{x.Id},{x.FirstName},{x.LastName}"));
+
+        var reservations = await reservationService.GetReservationsByCustomerAsync(1);
+
+        reservations.ToList().ForEach(x => Console.WriteLine(
+            $"{x.Id},{x.CustomerId},{x.RestaurantId},{x.TableId},{x.ReservationDate},{x.PartySize}"));
+
     }
 
     private static async Task TestCreatedService()
