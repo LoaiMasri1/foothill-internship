@@ -88,5 +88,30 @@ public class OrderItemService
         await _context.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<OrderMenuItemResponse>> ListOrdersAndMenuItemsAsync(int reservationId)
+    {
+        var orderItemsGrouped = await _context.OrderItems
+            .Include(x => x.Order)
+            .Include(x => x.Item)
+            .Where(x => x.Order.ReservationId == reservationId)
+            .GroupBy(x => x.OrderId)
+            .ToListAsync();
+
+        var response = orderItemsGrouped.Select(orderGroup => new OrderMenuItemResponse
+        (
+            orderGroup.Key,
+            orderGroup.Select(x => new MenuItemResponse(
+                x.Item.ItemId,
+                x.Item.ResturantId,
+               x.Item.Name,
+                x.Item.Description,
+               x.Item.Price
+                )).ToList(),
+            orderGroup.Sum(x => x.Quantity)
+            )
+        );
+
+        return response;
+    }
 
 }

@@ -32,6 +32,14 @@ class Program
         reservations.ToList().ForEach(x => Console.WriteLine(
             $"{x.Id},{x.CustomerId},{x.RestaurantId},{x.TableId},{x.ReservationDate},{x.PartySize}"));
 
+        var orders = await orderItemService.ListOrdersAndMenuItemsAsync(1);
+
+        orders.ToList().ForEach(x => Console.WriteLine(
+                       $@"
+                          OrderId: {x.OrderId},
+                          MenuItems: {x.MenuItems
+                          .Aggregate("", (acc, x) => acc + $@"({x.Id},{x.Name},{x.RestaurantId})")}
+                          Quantity: {x.Quantity}"));
     }
 
     private static async Task TestCreatedService()
