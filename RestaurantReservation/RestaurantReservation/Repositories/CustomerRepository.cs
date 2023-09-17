@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Services;

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using RestaurantReservation;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Db;
 using RestaurantReservation.Repositories;
@@ -7,6 +9,10 @@ using RestaurantReservation.Services;
 class Program
 {
     private static readonly RestaurantReservationDbContext context = new();
+    private static readonly IMapper mapper = new MapperConfiguration(cfg =>
+    {
+        cfg.AddProfile<MapperProfile>();
+    }).CreateMapper();
 
     private static readonly MenuItemRepository menuItemRepository = new(context);
     private static readonly ResturantRepository resturantRepository = new(context);
@@ -18,14 +24,14 @@ class Program
     private static readonly OrderItemRepository orderItemRepository = new(context);
 
 
-    private static readonly MenuItemService menuItemService = new(menuItemRepository);
-    private static readonly ResturantService resturantService = new(resturantRepository);
-    private static readonly CustomerService customerService = new(customerRepository);
-    private static readonly ReservationService reservationService = new(reservationRepository);
-    private static readonly TableService tableService = new(tableRepository);
-    private static readonly EmployeeService employeeService = new(employeeRepository);
-    private static readonly OrderService orderService = new(orderRepository);
-    private static readonly OrderItemService orderItemService = new(orderItemRepository);
+    private static readonly MenuItemService menuItemService = new(menuItemRepository,mapper);
+    private static readonly ResturantService resturantService = new(resturantRepository,mapper);
+    private static readonly CustomerService customerService = new(customerRepository,mapper);
+    private static readonly ReservationService reservationService = new(reservationRepository,mapper);
+    private static readonly TableService tableService = new(tableRepository,mapper);
+    private static readonly EmployeeService employeeService = new(employeeRepository,mapper);
+    private static readonly OrderService orderService = new(orderRepository,mapper);
+    private static readonly OrderItemService orderItemService = new(orderItemRepository,mapper);
 
     public async static Task Main()
     {
@@ -39,7 +45,7 @@ class Program
 
         var managers = await employeeService.ListManagersAsync();
 
-        managers.ToList().ForEach(x => Console.WriteLine($"{x.Id},{x.FirstName},{x.LastName}"));
+        managers.ToList().ForEach(x => Console.WriteLine($"{x.EmployeeId},{x.FirstName},{x.LastName}"));
 
         #endregion
 
@@ -47,7 +53,7 @@ class Program
         var reservations = await reservationService.GetReservationsByCustomerAsync(1);
 
         reservations.ToList().ForEach(x => Console.WriteLine(
-            $"{x.Id},{x.CustomerId},{x.RestaurantId},{x.TableId},{x.ReservationDate},{x.PartySize}"));
+            $"{x.ReservationsId},{x.CustomerId},{x.ResturantId},{x.TableId},{x.ReservationDate},{x.PartySize}"));
 
         #endregion
 
@@ -58,7 +64,7 @@ class Program
                        $@"
                           OrderId: {x.OrderId},
                           MenuItems: {x.MenuItems
-                          .Aggregate("", (acc, x) => acc + $@"({x.Id},{x.Name},{x.RestaurantId})")}
+                          .Aggregate("", (acc, x) => acc + $@"({x.ItemId},{x.Name},{x.RestaurantId})")}
                           Quantity: {x.Quantity}"));
         #endregion
 
@@ -66,7 +72,7 @@ class Program
         var orderedItems = await orderItemService.ListOrderedMenuItemsAsync(1);
 
         orderedItems.ToList().
-            ForEach(x => Console.WriteLine($@"{x.Id},{x.Name},{x.RestaurantId},{x.Price}"));
+            ForEach(x => Console.WriteLine($@"{x.ItemId},{x.Name},{x.RestaurantId},{x.Price}"));
         #endregion
 
         #region Calculate Average Order Amount
@@ -94,7 +100,7 @@ class Program
         var customers = customerService.GetCustomersWithLargeParties(3);
 
         customers.ToList().ForEach(x => Console.WriteLine(
-                       $@"{x.Id},{x.FirstName},{x.LastName},{x.Email},{x.PhoneNumber}"));
+                       $@"{x.CustomerId},{x.FirstName},{x.LastName},{x.Email},{x.PhoneNumber}"));
         #endregion
     }
 
@@ -130,7 +136,7 @@ class Program
 
         var orderItem = await orderItemService.CreateOrderItemAsync(orderItemRequest);
 
-        return orderItem.Id;
+        return orderItem.OrderItemId;
     }
     private async static Task<int> CreateOrderAsync(int reservationId, int employeeId)
     {
@@ -142,7 +148,7 @@ class Program
 
         var order = await orderService.CreateOrderAsync(orderRequest);
 
-        return order.Id;
+        return order.OrderId;
 
     }
     private async static Task<int> CreateReservationAsync(int customerId, int tableId, int resturantId)
@@ -156,7 +162,7 @@ class Program
 
         var reservation = await reservationService.CreateReservationAsync(reservationRequest);
 
-        return reservation.Id;
+        return reservation.ReservationsId;
     }
     private async static Task<int> CreateEmployeeAsync(int resturantId)
     {
@@ -167,7 +173,7 @@ class Program
              "Console");
 
         var employee = await employeeService.CreateEmployeeAsync(employeeRequest);
-        return employee.Id;
+        return employee.EmployeeId;
     }
     private async static Task<int> CreateMenuItemAsync(int resturantId)
     {
@@ -180,8 +186,8 @@ class Program
 
         var menuItem = await menuItemService.CreateMenuItemAsync(menuItemRequest);
 
-        return menuItem.Id;
-
+        return menuItem.ItemId;
+        
     }
     private async static Task<int> CreateTableAsync(int resturantId)
     {
@@ -189,7 +195,7 @@ class Program
 
         var table = await tableService.CreateTableAsync(tableRequest);
 
-        return table.Id;
+        return table.TableId;
     }
     private async static Task<int> CreateResturantAsync()
     {
@@ -202,7 +208,7 @@ class Program
 
         var resturant = await resturantService.CreateResturantAsync(resturantRequest);
 
-        return resturant.Id;
+        return resturant.ResturantsId;
     }
     private async static Task<int> CreateCustomerAsync()
     {
@@ -215,7 +221,7 @@ class Program
 
         var customer = await customerService.CreateCustomerAsync(customerRequest);
 
-        return customer.Id;
+        return customer.CustomerId;
     }
 
 }

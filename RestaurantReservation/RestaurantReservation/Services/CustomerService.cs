@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using AutoMapper;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Repositories;
@@ -8,54 +9,33 @@ namespace RestaurantReservation.Services;
 public class CustomerService
 {
     private readonly CustomerRepository _customerRepository;
+    private readonly IMapper _mapper;
 
-    public CustomerService(CustomerRepository customerRepository)
+    public CustomerService(CustomerRepository customerRepository,IMapper mapper)
     {
         _customerRepository = customerRepository;
+        _mapper = mapper;
     }
 
     public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest customerRequest)
     {
-        var newCustomer = new Customer
-        {
-            FirstName = customerRequest.FirstName,
-            LastName = customerRequest.LastName,
-            Email = customerRequest.Email,
-            PhoneNumber = customerRequest.PhoneNumber,
-        };
+        var newCustomer = _mapper.Map<Customer>(customerRequest);
 
         await _customerRepository.CreateCustomerAsync(newCustomer);
 
-        var response = new CustomerResponse(
-            newCustomer.CustomerId,
-            newCustomer.FirstName,
-            newCustomer.LastName,
-            newCustomer.Email,
-            newCustomer.PhoneNumber
-            );
+        var response = _mapper.Map<CustomerResponse>(newCustomer);
 
         return response;
     }
 
     public async Task<CustomerResponse> UpdateCustomerAsync(int id, CustomerRequest customerRequest)
     {
-        var updatedCustomer = new Customer
-        {
-            FirstName = customerRequest.FirstName,
-            LastName = customerRequest.LastName,
-            Email = customerRequest.Email,
-            PhoneNumber = customerRequest.PhoneNumber,
-        };
+        var updatedCustomer = _mapper.Map<Customer>(customerRequest);
 
         var customer = await _customerRepository
             .UpdateCustomerAsync(id,updatedCustomer);
 
-        var response = new CustomerResponse(
-            customer.CustomerId,
-            customer.FirstName,
-            customer.LastName,
-            customer.Email,
-            customer.PhoneNumber);
+        var response = _mapper.Map<CustomerResponse>(customer);
 
         return response;
     }
@@ -69,12 +49,7 @@ public class CustomerService
     {
        var customers = _customerRepository.GetCustomersWithLargeParties(minPartySize);
 
-        var result = customers.Select(x => new CustomerResponse(
-                x.CustomerId,
-                x.FirstName,
-                x.LastName,
-                x.Email,
-                x.PhoneNumber));
+        var result = customers.Select(x => _mapper.Map<CustomerResponse>(x));
 
         return result;
     }

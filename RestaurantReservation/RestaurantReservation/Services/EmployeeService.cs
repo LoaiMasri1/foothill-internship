@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using AutoMapper;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Repositories;
@@ -8,54 +9,33 @@ namespace RestaurantReservation.Services;
 public class EmployeeService
 {
     private readonly EmployeeRepository _employeeRepository;
+    private readonly IMapper _mapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository)
+    public EmployeeService(EmployeeRepository employeeRepository,IMapper mapper)
     {
         _employeeRepository = employeeRepository;
+        _mapper = mapper;
     }
 
     public async Task<EmployeeResponse> CreateEmployeeAsync(EmployeeRequest employeeRequest)
     {
-        var newEmployee = new Employee
-        {
-            FirstName = employeeRequest.FirstName,
-            LastName = employeeRequest.LastName,
-            Position = employeeRequest.Position,
-            ResturantId = employeeRequest.ResturantId
-        };
+        var newEmployee = _mapper.Map<Employee>(employeeRequest);
 
         await _employeeRepository.CreateEmployeeAsync(newEmployee);
 
-        var response = new EmployeeResponse(
-            newEmployee.EmployeeId,
-            newEmployee.ResturantId,
-            newEmployee.FirstName,
-            newEmployee.LastName,
-            newEmployee.Position);
-
+        var response = _mapper.Map<EmployeeResponse>(newEmployee);
         return response;
     }
 
     public async Task<EmployeeResponse> UpdateEmployeeAsync(int id, EmployeeRequest employeeRequest)
     {
         
-        var updatedEmployee = new Employee
-        {
-            FirstName = employeeRequest.FirstName,
-            LastName = employeeRequest.LastName,
-            Position = employeeRequest.Position,
-            ResturantId = employeeRequest.ResturantId
-        };
+        var updatedEmployee = _mapper.Map<Employee>(employeeRequest);
 
         var employee = await _employeeRepository
             .UpdateEmployeeAsync(id, updatedEmployee);
 
-        var response = new EmployeeResponse(
-            employee.EmployeeId,
-            employee.ResturantId,
-            employee.FirstName,
-            employee.LastName,
-            employee.Position);
+        var response = _mapper.Map<EmployeeResponse>(employee);
 
         return response;
     }
@@ -69,12 +49,7 @@ public class EmployeeService
         var managers = await _employeeRepository
             .ListManagersAsync();
 
-        var result = managers.Select(x => new EmployeeResponse(
-            x.EmployeeId,
-            x.ResturantId,
-            x.FirstName,
-            x.LastName,
-            x.Position));
+        var result = managers.Select(x => _mapper.Map<EmployeeResponse>(x));
 
         return result;
     }

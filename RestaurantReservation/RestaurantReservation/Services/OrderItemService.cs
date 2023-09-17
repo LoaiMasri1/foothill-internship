@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using AutoMapper;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Repositories;
@@ -8,27 +9,20 @@ namespace RestaurantReservation.Services;
 public class OrderItemService
 {
     private readonly OrderItemRepository _orderItemRepository;
+    private readonly IMapper _mapper;
 
-    public OrderItemService(OrderItemRepository orderItemRepository)
+    public OrderItemService(OrderItemRepository orderItemRepository,IMapper mapper)
     {
         _orderItemRepository = orderItemRepository;
+        _mapper = mapper;
     }
 
     public async Task<OrderItemResponse> CreateOrderItemAsync(OrderItemRequest orderItemRequest)
     {
-    var newOrderItem = new OrderItem
-        {
-            OrderId = orderItemRequest.OrderId,
-            ItemId = orderItemRequest.ItemId,
-            Quantity = orderItemRequest.Quantity
-        };
+    var newOrderItem = _mapper.Map<OrderItem>(orderItemRequest);
 
         await _orderItemRepository.CreateOrderItemAsync(newOrderItem);
-        var response = new OrderItemResponse(
-            newOrderItem.OrderItemId,
-            newOrderItem.OrderId,
-            newOrderItem.ItemId,
-            newOrderItem.Quantity);
+        var response = _mapper.Map<OrderItemResponse>(newOrderItem);
 
         return response;
     }
@@ -36,21 +30,12 @@ public class OrderItemService
     public async Task<OrderItemResponse> UpdateOrderItemAsync(
         int id, OrderItemRequest orderItemRequest)
     {
-        var updatedOrderItem = new OrderItem
-        {
-            OrderId = orderItemRequest.OrderId,
-            ItemId = orderItemRequest.ItemId,
-            Quantity = orderItemRequest.Quantity
-        };
+        var updatedOrderItem = _mapper.Map<OrderItem>(orderItemRequest);
 
         var orderItem = await _orderItemRepository
             .UpdateOrderItemAsync(id, updatedOrderItem);
         
-            var response = new OrderItemResponse(
-            orderItem.OrderItemId,
-            orderItem.OrderId,
-            orderItem.ItemId,
-            orderItem.Quantity);
+            var response = _mapper.Map<OrderItemResponse>(orderItem);
 
         return response;
     }
@@ -72,7 +57,7 @@ public class OrderItemService
     {
         var orderItems = await _orderItemRepository.ListOrderedMenuItemsAsync(reservationId);
         var response = orderItems.Select(x => new MenuItemResponse(
-            x.Item.ItemId,
+            x.ItemId,
             x.Item.ResturantId,
             x.Item.Name,
             x.Item.Description,

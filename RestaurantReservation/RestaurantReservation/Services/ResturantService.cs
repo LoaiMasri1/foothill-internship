@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using AutoMapper;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Repositories;
@@ -8,28 +9,19 @@ namespace RestaurantReservation.Services;
 public class ResturantService
 {
     private readonly ResturantRepository _resturantRepository;
+    private readonly IMapper _mapper;
 
-    public ResturantService(ResturantRepository resturantRepository)
+    public ResturantService(ResturantRepository resturantRepository, IMapper mapper)
     {
         _resturantRepository = resturantRepository;
+        _mapper = mapper;
     }
 
     public async Task<ResturantResponse> CreateResturantAsync(ResturantRequest resturantRequest)
     {
-        var newResturant = new Resturant
-        {
-            Name = resturantRequest.Name,
-            Address = resturantRequest.Address,
-            PhoneNumber = resturantRequest.PhoneNumber,
-            OpeningHours = resturantRequest.OpeningHours
-        };
+        var newResturant = _mapper.Map<Resturant>(resturantRequest);
         await _resturantRepository.CreateResturantAsync(newResturant);
-        var response = new ResturantResponse(
-        newResturant.ResturantsId,
-        newResturant.Name,
-        newResturant.Address,
-        newResturant.PhoneNumber,
-        newResturant.OpeningHours);
+        var response = _mapper.Map<ResturantResponse>(newResturant);
 
         return response;
     }
@@ -37,23 +29,12 @@ public class ResturantService
     public async Task<ResturantResponse> UpdateResturantAsync(int id, ResturantRequest resturantRequest)
     {
 
-        var updatedResturant = new Resturant
-        {
-            Name = resturantRequest.Name,
-            Address = resturantRequest.Address,
-            PhoneNumber = resturantRequest.PhoneNumber,
-            OpeningHours = resturantRequest.OpeningHours
-        };
+        var updatedResturant = _mapper.Map<Resturant>(resturantRequest);
 
         var resturant = await _resturantRepository
             .UpdateResturantAsync(id, updatedResturant);
 
-        var response = new ResturantResponse(
-     resturant.ResturantsId,
-     resturant.Name,
-     resturant.Address,
-     resturant.PhoneNumber,
-     resturant.OpeningHours);
+        var response = _mapper.Map<ResturantResponse>(resturant);
 
         return response;
     }

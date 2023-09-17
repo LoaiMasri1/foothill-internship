@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Contracts.Requests;
+﻿using AutoMapper;
+using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Repositories;
@@ -8,33 +9,22 @@ namespace RestaurantReservation.Services;
 public class ReservationService
 {
     private readonly ReservationRepository _reservationRepository;
+    private readonly IMapper _mapper;
 
-    public ReservationService(ReservationRepository reservationRepository)
+    public ReservationService(ReservationRepository reservationRepository,IMapper mapper)
     {
         _reservationRepository = reservationRepository;
+        _mapper = mapper;
     }
 
     public async Task<ReservationResponse> CreateReservationAsync(ReservationRequest reservationRequest)
     {
 
-        var newReservation = new Reservation
-        {
-            CustomerId = reservationRequest.CustomerId,
-            ResturantId = reservationRequest.RestaurantId,
-            TableId = reservationRequest.TableId,
-            ReservationDate = reservationRequest.ReservationDate,
-            PartySize = reservationRequest.PartySize
-        };
+        var newReservation = _mapper.Map<Reservation>(reservationRequest);
 
         await _reservationRepository.CreateReservationAsync(newReservation);
 
-        var response = new ReservationResponse(
-            newReservation.ReservationsId,
-            newReservation.CustomerId,
-            newReservation.ResturantId,
-            newReservation.TableId,
-            newReservation.ReservationDate,
-            newReservation.PartySize);
+        var response = _mapper.Map<ReservationResponse>(newReservation);
 
         return response;
     }
@@ -42,25 +32,12 @@ public class ReservationService
 
     public async Task<ReservationResponse> UpdateReservationAsync(int id, ReservationRequest reservationRequest)
     {
-        var updatedRservation = new Reservation
-        {
-            CustomerId = reservationRequest.CustomerId,
-            ResturantId = reservationRequest.RestaurantId,
-            TableId = reservationRequest.TableId,
-            ReservationDate = reservationRequest.ReservationDate,
-            PartySize = reservationRequest.PartySize
-        };
+        var updatedRservation = _mapper.Map<Reservation>(reservationRequest);
 
         var reservation = await _reservationRepository
             .UpdateReservationAsync(id, updatedRservation);
 
-        var response = new ReservationResponse(
-            reservation.ReservationsId,
-            reservation.CustomerId,
-            reservation.ResturantId,
-            reservation.TableId,
-            reservation.ReservationDate,
-            reservation.PartySize);
+        var response = _mapper.Map<ReservationResponse>(reservation);
 
         return response;
     }
@@ -75,13 +52,7 @@ public class ReservationService
         )
     {
         var reservations = await _reservationRepository.GetReservationsByCustomerAsync(customerId); 
-        var response = reservations.Select(x => new ReservationResponse(
-            x.ReservationsId,
-            x.CustomerId,
-            x.ResturantId,
-            x.TableId,
-            x.ReservationDate,
-            x.PartySize));
+        var response = reservations.Select(x => _mapper.Map<ReservationResponse>(x));
        
         return response;
     }
