@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Services;
 
@@ -45,7 +46,7 @@ public class MenuItemRepository
 
     public async Task<bool> IsExistAsync(int id)
     {
-        var exists = await _context.MenuItems.AnyAsync(x => x.MenuItemId == id);
+        var exists = await _context.MenuItems.AnyAsync(x => x.ItemId == id);
         return exists;
     }
 

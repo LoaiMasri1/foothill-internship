@@ -49,4 +49,13 @@ public class ReservationRepository
         var exists = await _context.Reservations.AnyAsync(x => x.ReservationsId == id);
         return exists;
     }
+    public async Task<IEnumerable<Reservation>> GetReservationsByCustomerAsync(
+        int customerId)
+    {
+        var reservations = await _context.Reservations
+            .Where(x => x.CustomerId == customerId)
+            .ToListAsync();
+
+        return reservations;
+    }
 }

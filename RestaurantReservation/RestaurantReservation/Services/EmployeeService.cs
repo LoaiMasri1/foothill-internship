@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Contracts.Requests;
+﻿using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Repositories;
 
 namespace RestaurantReservation.Services;
 
 public class EmployeeService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly EmployeeRepository _employeeRepository;
 
-    public EmployeeService(RestaurantReservationDbContext context)
+    public EmployeeService(EmployeeRepository employeeRepository)
     {
-        _context = context;
+        _employeeRepository = employeeRepository;
     }
 
     public async Task<EmployeeResponse> CreateEmployeeAsync(EmployeeRequest employeeRequest)
@@ -25,8 +24,7 @@ public class EmployeeService
             ResturantId = employeeRequest.ResturantId
         };
 
-        await _context.Employees.AddAsync(newEmployee);
-        await _context.SaveChangesAsync();
+        await _employeeRepository.CreateEmployeeAsync(newEmployee);
 
         var response = new EmployeeResponse(
             newEmployee.EmployeeId,
@@ -40,23 +38,17 @@ public class EmployeeService
 
     public async Task<EmployeeResponse> UpdateEmployeeAsync(int id, EmployeeRequest employeeRequest)
     {
-        var employee = await _context.Employees.FindAsync(id)
-            ?? throw new NotFoundException($"Employee with id {id} does not exist");
-
-        var isResturantExist = await _context.Resturants
-            .AnyAsync(x => x.ResturantsId == employeeRequest.ResturantId);
-
-        if (!isResturantExist)
+        
+        var updatedEmployee = new Employee
         {
-            throw new NotFoundException($"Resturant with id {employeeRequest.ResturantId} does not exist");
-        }
+            FirstName = employeeRequest.FirstName,
+            LastName = employeeRequest.LastName,
+            Position = employeeRequest.Position,
+            ResturantId = employeeRequest.ResturantId
+        };
 
-        employee.FirstName = employeeRequest.FirstName;
-        employee.LastName = employeeRequest.LastName;
-        employee.Position = employeeRequest.Position;
-        employee.ResturantId = employeeRequest.ResturantId;
-
-        await _context.SaveChangesAsync();
+        var employee = await _employeeRepository
+            .UpdateEmployeeAsync(id, updatedEmployee);
 
         var response = new EmployeeResponse(
             employee.EmployeeId,
@@ -70,25 +62,20 @@ public class EmployeeService
 
     public async Task DeleteEmployeeAsync(int id)
     {
-        var employee = await _context.Employees.FindAsync(id)
-            ?? throw new NotFoundException($"Employee with id {id} does not exist");
-
-        _context.Employees.Remove(employee);
-        await _context.SaveChangesAsync();
+        await _employeeRepository.DeleteEmployeeAsync(id);
     }
 
     public async Task<IEnumerable<EmployeeResponse>> ListManagersAsync() { 
-        var managers = await _context.Employees
-            .Where(x => x.Position == "Manager")
-            .ToListAsync();
+        var managers = await _employeeRepository
+            .ListManagersAsync();
 
-        var response = managers.Select(x => new EmployeeResponse(
+        var result = managers.Select(x => new EmployeeResponse(
             x.EmployeeId,
             x.ResturantId,
             x.FirstName,
             x.LastName,
             x.Position));
 
-        return response;
+        return result;
     }
 }

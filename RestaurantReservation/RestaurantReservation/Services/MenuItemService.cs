@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Contracts.Requests;
+﻿using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Repositories;
 
 namespace RestaurantReservation.Services;
 
 public class MenuItemService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly MenuItemRepository _menuItemRepository;
 
-    public MenuItemService(RestaurantReservationDbContext context)
+    public MenuItemService(MenuItemRepository menuItemRepository)
     {
-        _context = context;
+        _menuItemRepository = menuItemRepository;
     }
 
     public async Task<MenuItemResponse> CreateMenuItemAsync(MenuItemRequest menuItemRequest)
@@ -25,8 +24,7 @@ public class MenuItemService
             ResturantId = menuItemRequest.RestaurantId
         };
 
-        await _context.MenuItems.AddAsync(newMenuItem);
-        await _context.SaveChangesAsync();
+        await _menuItemRepository.CreateMenuItemAsync(newMenuItem);
 
         var response = new MenuItemResponse(
             newMenuItem.ItemId,
@@ -40,23 +38,16 @@ public class MenuItemService
 
     public async Task<MenuItemResponse> UpdateMenuItemAsync(int id, MenuItemRequest menuItemRequest)
     {
-        var menuItem = await _context.MenuItems.FindAsync(id)
-            ?? throw new NotFoundException($"Menu item with id {id} does not exist");
-
-        var isRestaurantExist = await _context.Resturants
-            .AnyAsync(x => x.ResturantsId == menuItemRequest.RestaurantId);
-
-        if (!isRestaurantExist)
+        var updatedMenuItem = new MenuItem
         {
-            throw new NotFoundException($"Restaurant with id {menuItemRequest.RestaurantId} does not exist");
-        }
+            Name = menuItemRequest.Name,
+            Description = menuItemRequest.Description,
+            Price = menuItemRequest.Price,
+            ResturantId = menuItemRequest.RestaurantId
+        };
 
-        menuItem.Name = menuItemRequest.Name;
-        menuItem.Description = menuItemRequest.Description;
-        menuItem.Price = menuItemRequest.Price;
-        menuItem.ResturantId = menuItemRequest.RestaurantId;
-
-        await _context.SaveChangesAsync();
+        var menuItem = await _menuItemRepository
+            .UpdateMenuItemAsync(id, updatedMenuItem);
 
         var response = new MenuItemResponse(
             menuItem.ItemId,
@@ -71,10 +62,6 @@ public class MenuItemService
 
     public async Task DeleteMenuItemAsync(int id)
     {
-        var menuItem = await _context.MenuItems.FindAsync(id)
-            ?? throw new NotFoundException($"Menu item with id {id} does not exist");
-
-        _context.MenuItems.Remove(menuItem);
-        await _context.SaveChangesAsync();
+        await _menuItemRepository.DeleteMenuItemAsync(id);
     }
 }

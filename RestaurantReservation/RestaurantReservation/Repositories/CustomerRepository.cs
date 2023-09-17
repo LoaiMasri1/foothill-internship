@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Services;
@@ -22,7 +23,7 @@ public class CustomerRepository
         return customer;
     }
 
-    public async Task<Customer> UpdateCustomerAsync(int id,Customer customer)
+    public async Task<Customer> UpdateCustomerAsync(int id, Customer customer)
     {
         var exist = await IsExistAsync(id);
         if (!exist)
@@ -46,7 +47,16 @@ public class CustomerRepository
 
     public async Task<bool> IsExistAsync(int id)
     {
-        var exists= await _context.Customers.AnyAsync(x => x.CustomerId == id);
+        var exists = await _context.Customers.AnyAsync(x => x.CustomerId == id);
         return exists;
+    }
+
+    public IEnumerable<Customer> GetCustomersWithLargeParties(int minPartySize)
+    {
+        var customers = _context.Customers
+            .FromSqlRaw($"EXEC FindCustomersWithLargeParties {@minPartySize}", minPartySize)
+            .AsEnumerable();
+
+        return customers;
     }
 }

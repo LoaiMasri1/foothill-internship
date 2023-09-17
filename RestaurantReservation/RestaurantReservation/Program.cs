@@ -1,20 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Db;
+using RestaurantReservation.Repositories;
 using RestaurantReservation.Services;
 
 class Program
 {
     private static readonly RestaurantReservationDbContext context = new();
 
-    private static readonly MenuItemService menuItemService = new(context);
-    private static readonly ResturantService resturantService = new(context);
-    private static readonly CustomerService customerService = new(context);
-    private static readonly ReservationService reservationService = new(context);
-    private static readonly TableService tableService = new(context);
-    private static readonly EmployeeService employeeService = new(context);
-    private static readonly OrderService orderService = new(context);
-    private static readonly OrderItemService orderItemService = new(context);
+    private static readonly MenuItemRepository menuItemRepository = new(context);
+    private static readonly ResturantRepository resturantRepository = new(context);
+    private static readonly CustomerRepository customerRepository = new(context);
+    private static readonly ReservationRepository reservationRepository = new(context);
+    private static readonly TableRepository tableRepository = new(context);
+    private static readonly EmployeeRepository employeeRepository = new(context);
+    private static readonly OrderRepository orderRepository = new(context);
+    private static readonly OrderItemRepository orderItemRepository = new(context);
+
+
+    private static readonly MenuItemService menuItemService = new(menuItemRepository);
+    private static readonly ResturantService resturantService = new(resturantRepository);
+    private static readonly CustomerService customerService = new(customerRepository);
+    private static readonly ReservationService reservationService = new(reservationRepository);
+    private static readonly TableService tableService = new(tableRepository);
+    private static readonly EmployeeService employeeService = new(employeeRepository);
+    private static readonly OrderService orderService = new(orderRepository);
+    private static readonly OrderItemService orderItemService = new(orderItemRepository);
 
     public async static Task Main()
     {

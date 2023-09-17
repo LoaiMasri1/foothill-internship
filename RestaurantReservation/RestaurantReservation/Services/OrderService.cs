@@ -1,33 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Repositories;
 
 namespace RestaurantReservation.Services;
 
 public class OrderService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly OrderRepository _orderRepository;
 
-    public OrderService(RestaurantReservationDbContext context)
+    public OrderService(OrderRepository orderRepository)
     {
-        _context= context;
+        _orderRepository = orderRepository;
     }
 
     public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)
     {
         var newOrder = new Order
         {
-             EmployeeId = orderRequest.EmployeeId,
-             ReservationId = orderRequest.ReservationId,
-             OrderDate = orderRequest.OrderDate,
-             TotalAmount = orderRequest.TotalAmount
+            EmployeeId = orderRequest.EmployeeId,
+            ReservationId = orderRequest.ReservationId,
+            OrderDate = orderRequest.OrderDate,
+            TotalAmount = orderRequest.TotalAmount
         };
 
-        await _context.Orders.AddAsync(newOrder);
-        await _context.SaveChangesAsync();
-
+        await _orderRepository.CreateOrderAsync(newOrder);
         var response = new OrderResponse(
             newOrder.OrderId,
             newOrder.EmployeeId,
@@ -40,22 +38,16 @@ public class OrderService
 
     public async Task<OrderResponse> UpdateOrderAsync(int id, OrderRequest orderRequest)
     {
-        var order = await _context.Orders.FindAsync(id)
-            ?? throw new NotFoundException($"Order with id {id} does not exist");
-
-        var isEmployeeExist = await _context.Employees
-            .AnyAsync(x => x.EmployeeId == orderRequest.EmployeeId);
-
-        if (!isEmployeeExist)
+        var updatedOrder = new Order
         {
-            throw new NotFoundException($"Employee with id {orderRequest.EmployeeId} does not exist");
-        }
+            EmployeeId = orderRequest.EmployeeId,
+            ReservationId = orderRequest.ReservationId,
+            OrderDate = orderRequest.OrderDate,
+            TotalAmount = orderRequest.TotalAmount
+        };
 
-        order.EmployeeId = orderRequest.EmployeeId;
-        order.OrderDate = orderRequest.OrderDate;
-        order.TotalAmount = orderRequest.TotalAmount;
-
-        await _context.SaveChangesAsync();
+        var order = await _orderRepository
+            .UpdateOrderAsync(id, updatedOrder);
 
         var response = new OrderResponse(
             order.OrderId,
@@ -69,13 +61,9 @@ public class OrderService
 
     public async Task<double> CalculateAverageOrderAmountAsync(int employeeId)
     {
-        var orders = await _context.Orders
-            .Where(x => x.EmployeeId == employeeId)
-            .ToListAsync();
+        var orders = await _orderRepository
+            .CalculateAverageOrderAmountAsync(employeeId);
 
-        var averageOrderAmount = orders
-            .Average(x => x.TotalAmount);
-
-        return averageOrderAmount;
+        return orders;
     }
 }

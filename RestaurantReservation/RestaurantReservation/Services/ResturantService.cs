@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Contracts.Requests;
+﻿using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Repositories;
 
 namespace RestaurantReservation.Services;
 
 public class ResturantService
 {
-    private readonly RestaurantReservationDbContext _context;
+    private readonly ResturantRepository _resturantRepository;
 
-    public ResturantService(RestaurantReservationDbContext context)
+    public ResturantService(ResturantRepository resturantRepository)
     {
-        _context = context;
+        _resturantRepository = resturantRepository;
     }
 
     public async Task<ResturantResponse> CreateResturantAsync(ResturantRequest resturantRequest)
@@ -24,72 +23,51 @@ public class ResturantService
             PhoneNumber = resturantRequest.PhoneNumber,
             OpeningHours = resturantRequest.OpeningHours
         };
-
-        await _context.Resturants.AddAsync(newResturant);
-        await _context.SaveChangesAsync();
-
+        await _resturantRepository.CreateResturantAsync(newResturant);
         var response = new ResturantResponse(
-            newResturant.ResturantsId,
-            newResturant.Name,
-            newResturant.Address,
-            newResturant.PhoneNumber,
-            newResturant.OpeningHours);
+        newResturant.ResturantsId,
+        newResturant.Name,
+        newResturant.Address,
+        newResturant.PhoneNumber,
+        newResturant.OpeningHours);
 
         return response;
     }
 
     public async Task<ResturantResponse> UpdateResturantAsync(int id, ResturantRequest resturantRequest)
     {
-        var resturant = await _context.Resturants.FindAsync(id)
-            ?? throw new NotFoundException($"Resturant with id {id} does not exist");
 
-        resturant.Name = resturantRequest.Name;
-        resturant.Address = resturantRequest.Address;
-        resturant.PhoneNumber = resturantRequest.PhoneNumber;
-        resturant.OpeningHours = resturantRequest.OpeningHours;
+        var updatedResturant = new Resturant
+        {
+            Name = resturantRequest.Name,
+            Address = resturantRequest.Address,
+            PhoneNumber = resturantRequest.PhoneNumber,
+            OpeningHours = resturantRequest.OpeningHours
+        };
 
-        await _context.SaveChangesAsync();
+        var resturant = await _resturantRepository
+            .UpdateResturantAsync(id, updatedResturant);
 
         var response = new ResturantResponse(
-            resturant.ResturantsId,
-            resturant.Name,
-            resturant.Address,
-            resturant.PhoneNumber,
-            resturant.OpeningHours);
+     resturant.ResturantsId,
+     resturant.Name,
+     resturant.Address,
+     resturant.PhoneNumber,
+     resturant.OpeningHours);
 
         return response;
     }
 
-    public async Task<ResturantResponse> GetResturantAsync(int id)
-    {
-        var resturant = await _context.Resturants.FindAsync(id)
-            ?? throw new NotFoundException($"Resturant with id {id} does not exist");
-
-        var response = new ResturantResponse(
-            resturant.ResturantsId,
-            resturant.Name,
-            resturant.Address,
-            resturant.PhoneNumber,
-            resturant.OpeningHours);
-
-        return response;
-    }
     public async Task DeleteResturantAsync(int id)
     {
-        var resturant = await _context.Resturants.FindAsync(id)
-            ?? throw new NotFoundException($"Resturant with id {id} does not exist");
-
-        _context.Resturants.Remove(resturant);
-        await _context.SaveChangesAsync();
+        await _resturantRepository.DeleteResturantAsync(id);
     }
 
     public decimal CalculateRestaurantRevenueAsync(int resturantId)
     {
-        var revenue = _context.Resturants
-            .Select(r => _context.CalculateRestaurantRevenue(resturantId))
-            .FirstOrDefault();
-
+        var revenue = _resturantRepository.CalculateRestaurantRevenueAsync(resturantId);
         return revenue;
+
     }
 
 }
