@@ -1,5 +1,5 @@
 ﻿namespace RestaurantReservation.Contracts.Responses;
 public record TableResponse(
-    int Id,
-    int RestaurantId,
+    int TableId,
+    int ResturantId,
     int Capacity);

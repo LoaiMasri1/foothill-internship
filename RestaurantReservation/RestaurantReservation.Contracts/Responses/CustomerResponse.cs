@@ -1,7 +1,7 @@
 ﻿namespace RestaurantReservation.Contracts.Responses;
 
 public record CustomerResponse(
-    int Id,
+    int CustomerId,
     string FirstName,
     string LastName,
     string Email,

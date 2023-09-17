@@ -1,8 +1,8 @@
 ﻿namespace RestaurantReservation.Contracts.Responses;
 public record ReservationResponse(
-    int Id,
+    int ReservationsId,
     int CustomerId,
-    int RestaurantId,
+    int ResturantId,
     int TableId,
     DateTime ReservationDate,
     int PartySize);
