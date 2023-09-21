@@ -2,7 +2,6 @@
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
-using RestaurantReservation.Repositories;
 
 namespace RestaurantReservation;
 

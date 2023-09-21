@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RestaurantReservation;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Db;
-using RestaurantReservation.Repositories;
+using RestaurantReservation.Db.Repositories;
 using RestaurantReservation.Services;
 
 class Program

@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
-using RestaurantReservation.Services;
 
-namespace RestaurantReservation.Repositories;
+namespace RestaurantReservation.Db.Repositories;
 
 public class CustomerRepository
 {

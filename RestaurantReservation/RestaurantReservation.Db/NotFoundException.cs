@@ -1,4 +1,4 @@
-﻿namespace RestaurantReservation.Services;
+﻿namespace RestaurantReservation.Db;
 
 [Serializable]
 public class NotFoundException : Exception
