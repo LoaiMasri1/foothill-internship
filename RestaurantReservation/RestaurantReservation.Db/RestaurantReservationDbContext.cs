@@ -11,8 +11,7 @@ public class RestaurantReservationDbContext : DbContext
     public RestaurantReservationDbContext() { }
 
     public RestaurantReservationDbContext(DbContextOptions<RestaurantReservationDbContext> options)
-        : base(options)
-    { }
+        : base(options) { }
 
     public DbSet<Customer> Customers { get; set; }
 
@@ -31,12 +30,19 @@ public class RestaurantReservationDbContext : DbContext
     public DbSet<Table> Tables { get; set; }
     public DbSet<ReservationsView> ReservationsViews { get; set; }
 
-    public decimal CalculateRestaurantRevenue(int restaurantId)
-    => throw new NotSupportedException();
-    
+    public decimal CalculateRestaurantRevenue(int restaurantId) =>
+        throw new NotSupportedException();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-        optionsBuilder.UseSqlServer(DbConnectionString);
+        optionsBuilder.UseSqlServer(
+            DbConnectionString,
+            options =>
+                options.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null
+                )
+        );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -222,8 +228,12 @@ public class RestaurantReservationDbContext : DbContext
         modelBuilder.Entity<ReservationsView>().HasNoKey().ToView(nameof(ReservationsView));
 
         modelBuilder
-            .HasDbFunction(typeof(RestaurantReservationDbContext)
-            .GetMethod(nameof(CalculateRestaurantRevenue), new[] { typeof(int) })!)
+            .HasDbFunction(
+                typeof(RestaurantReservationDbContext).GetMethod(
+                    nameof(CalculateRestaurantRevenue),
+                    new[] { typeof(int) }
+                )!
+            )
             .HasName("CalculateRestaurantRevenue");
 
         SeedData(modelBuilder);
