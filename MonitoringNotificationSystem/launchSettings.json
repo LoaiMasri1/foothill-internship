@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "monitoringnotificationsystem.notificationcenter": "StartDebugging",
+        "monitoringnotificationsystem.server": "StartDebugging",
+        "monitoringnotificationsystem.webapp": "StartDebugging"
+      }
+    }
+  }
+}

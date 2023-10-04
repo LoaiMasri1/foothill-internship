@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  monitoringnotificationsystem.notificationcenter:
+    image: ${DOCKER_REGISTRY-}monitoringnotificationsystemnotificationcenter
+    build:
+      context: .
+      dockerfile: MonitoringNotificationSystem.NotificationCenter/Dockerfile
+
+  monitoringnotificationsystem.server:
+    image: ${DOCKER_REGISTRY-}monitoringnotificationsystemserver
+    build:
+      context: .
+      dockerfile: MonitoringNotificationSystem.Server/Dockerfile
+
+
+  monitoringnotificationsystem.webapp:
+    image: ${DOCKER_REGISTRY-}monitoringnotificationsystemwebapp
+    build:
+      context: .
+      dockerfile: MonitoringNotificationSystem.Webapp/Dockerfile
+
