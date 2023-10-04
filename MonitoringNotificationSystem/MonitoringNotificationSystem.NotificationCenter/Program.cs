@@ -1,4 +1,7 @@
+using MonitoringNotificationSystem.NotificationCenter;
 using MonitoringNotificationSystem.NotificationCenter.Hubs;
+using MonitoringNotificationSystem.NotificationCenter.Repositories;
+using MonitoringNotificationSystem.NotificationCenter.Services;
 using MonitoringNotificationSystem.NotificationCenter.Setups;
 using MonitoringNotificationSystem.Shared.Configurations;
 
@@ -15,6 +18,11 @@ builder.Services.Configure<AnomalyDetectionConfig>(
 );
 
 builder.Services.ConfigureOptions<MongoDBConfigSetup>();
+
+builder.Services.AddSingleton<INotificationRepository, NotificationRepository>();
+builder.Services.AddSingleton<IAnomalyDetectionService, AnomalyDetectionService>();
+
+builder.Services.AddSingleton<Connector>();
 
 var app = builder.Build();
 
