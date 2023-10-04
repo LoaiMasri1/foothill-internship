@@ -14,6 +14,7 @@ services:
       - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
       - "MONGO_URL=mongodb://monitoringnotificationsystem.mongo:27017"
       - "MONGO_DB=monitoringnotificationsystem"
+
     depends_on:
       - monitoringnotificationsystem.mongo
       - monitoringnotificationsystem.rabbitmq
@@ -30,6 +31,10 @@ services:
       - "RABBITMQ_USER=guest"
       - "RABBITMQ_PASSWORD=guest"
       - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
+      - "SAMPLING_INTERVAL_SECONDS=5"
+      - "SERVER_IDENTIFIER=Server123"
+
+
     depends_on:
       - monitoringnotificationsystem.rabbitmq
 

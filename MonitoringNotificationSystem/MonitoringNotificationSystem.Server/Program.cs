@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MonitoringNotificationSystem.MessageBroker;
+﻿using MonitoringNotificationSystem.MessageBroker;
 using MonitoringNotificationSystem.Server;
 using MonitoringNotificationSystem.Shared.Configurations;
 
@@ -7,17 +6,18 @@ var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
 var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 
-var serverStaticsConfig = new ServerStatisticsConfig();
+var serverIdentifier = Environment.GetEnvironmentVariable("SERVER_IDENTIFIER")!;
+var sampleIntervalSeconds = int.Parse(
+    Environment.GetEnvironmentVariable("SAMPLING_INTERVAL_SECONDS")!
+);
 
-const string appSettingsFileName = "appsettings.json";
+var serverStaticsConfig = new ServerStatisticsConfig
+{
+    ServerIdentifier = serverIdentifier,
+    SamplingIntervalSeconds = sampleIntervalSeconds
+};
 
 var rabbitMQConnectionString = $"amqp://{rabbitMQUser}:{rabbitMQPassword}@{rabbitMQHost}";
-
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile(appSettingsFileName, optional: true, reloadOnChange: true)
-    .Build();
-
-configuration.GetSection(nameof(ServerStatisticsConfig)).Bind(serverStaticsConfig);
 
 IMessageBroker messageBroker = new RabbitMQMessageBroker(rabbitMQConnectionString);
 
