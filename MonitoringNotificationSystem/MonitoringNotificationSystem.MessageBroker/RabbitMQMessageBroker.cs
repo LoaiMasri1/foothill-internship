@@ -9,11 +9,17 @@ public class RabbitMQMessageBroker : IMessageBroker
 {
     private readonly string _connectionString;
     private readonly IModel _channel;
+    private const int maxRetryCount = 3;
+    private const int delayBetweenRetries = 5;
 
     public RabbitMQMessageBroker(string connectionString)
     {
         _connectionString = connectionString;
-        _channel = CreateConnection().CreateModel();
+        _channel = CreateConnectionWithRetry(
+                maxRetryCount,
+                delayBetweenRetries: TimeSpan.FromSeconds(delayBetweenRetries)
+            )
+            .CreateModel();
     }
 
     public async Task SubscribeAsync<T>(
@@ -59,18 +65,38 @@ public class RabbitMQMessageBroker : IMessageBroker
         );
     }
 
-    private IConnection CreateConnection()
+    private IConnection CreateConnectionWithRetry(
+        int maxRetryCount = 3,
+        TimeSpan delayBetweenRetries = default
+    )
     {
         var factory = new ConnectionFactory { Uri = new Uri(_connectionString) };
+        int retryCount = 0;
 
-        try
+        while (true)
         {
-            return factory.CreateConnection();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            throw;
+            try
+            {
+                return factory.CreateConnection();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    $"Error creating connection. Retry count: {retryCount + 1}. Exception: {ex}"
+                );
+
+                if (++retryCount >= maxRetryCount)
+                {
+                    Console.WriteLine($"Max retry count reached. Giving up.");
+                    throw;
+                }
+
+                if (delayBetweenRetries != default)
+                {
+                    Console.WriteLine($"Retrying in {delayBetweenRetries.TotalSeconds} seconds...");
+                    Thread.Sleep(delayBetweenRetries);
+                }
+            }
         }
     }
 }
