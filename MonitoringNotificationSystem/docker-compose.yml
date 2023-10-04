@@ -33,10 +33,18 @@ services:
      image: docker.io/library/mongo:latest
      ports:
      - "27017:27017"
+     volumes:
+     - mongo:/data/db
 
   monitoringnotificationsystem.rabbitmq:
     image: docker.io/library/rabbitmq:3-management
     ports:
       - "5672:5672"
       - "8080:15672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+volumes:
+  mongo:
+  rabbitmq:
 
