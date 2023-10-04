@@ -5,6 +5,14 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.Server", "MonitoringNotificationSystem.Server\MonitoringNotificationSystem.Server.csproj", "{170DEF3F-F045-4EF8-909C-6A6397F2E5A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.NotificationCenter", "MonitoringNotificationSystem.NotificationCenter\MonitoringNotificationSystem.NotificationCenter.csproj", "{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.Shared", "MonitoringNotificationSystem.Shared\MonitoringNotificationSystem.Shared.csproj", "{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.Webapp", "MonitoringNotificationSystem.Webapp\MonitoringNotificationSystem.Webapp.csproj", "{3DBC29B7-132C-4DE8-B2F1-420C2F225714}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.MessageBroker", "MonitoringNotificationSystem.MessageBroker\MonitoringNotificationSystem.MessageBroker.csproj", "{07827554-3151-42A8-9083-64EB7DED4653}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{170DEF3F-F045-4EF8-909C-6A6397F2E5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{170DEF3F-F045-4EF8-909C-6A6397F2E5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{170DEF3F-F045-4EF8-909C-6A6397F2E5A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DBC29B7-132C-4DE8-B2F1-420C2F225714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DBC29B7-132C-4DE8-B2F1-420C2F225714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DBC29B7-132C-4DE8-B2F1-420C2F225714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DBC29B7-132C-4DE8-B2F1-420C2F225714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07827554-3151-42A8-9083-64EB7DED4653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07827554-3151-42A8-9083-64EB7DED4653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07827554-3151-42A8-9083-64EB7DED4653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07827554-3151-42A8-9083-64EB7DED4653}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

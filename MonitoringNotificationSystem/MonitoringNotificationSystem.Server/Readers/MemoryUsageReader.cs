@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace MonitoringNotificationSystem.Server;
+namespace MonitoringNotificationSystem.Server.Readers;
 
 public class MemoryUsageReader
 {
