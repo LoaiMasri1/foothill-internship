@@ -14,7 +14,12 @@ services:
       - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
       - "MONGO_URL=mongodb://monitoringnotificationsystem.mongo:27017"
       - "MONGO_DB=monitoringnotificationsystem"
-
+      - "SAMPLING_INTERVAL_SECONDS=5"
+      - "SERVER_IDENTIFIER=Server123"
+      - "MEMORY_USAGE_ANOMALY_THRESHOLD_PERCENTAGE=0.4"
+      - "CPU_USAGE_ANOMALY_THRESHOLD_PERCENTAGE=0.5"
+      - "MEMORY_USAGE_THRESHOLD_PERCENTAGE=0.8"
+      - "CPU_USAGE_THRESHOLD_PERCENTAGE=0.9"
     depends_on:
       - monitoringnotificationsystem.mongo
       - monitoringnotificationsystem.rabbitmq
@@ -33,7 +38,6 @@ services:
       - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
       - "SAMPLING_INTERVAL_SECONDS=5"
       - "SERVER_IDENTIFIER=Server123"
-
 
     depends_on:
       - monitoringnotificationsystem.rabbitmq

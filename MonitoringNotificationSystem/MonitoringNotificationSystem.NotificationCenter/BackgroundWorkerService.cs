@@ -7,17 +7,14 @@ public class BackgroundWorkerService : BackgroundService
 {
     private readonly Connector _connector;
     private readonly ILogger<BackgroundWorkerService> _logger;
-    private readonly ServerStatisticsConfig _config;
 
     public BackgroundWorkerService(
         Connector connector,
-        ILogger<BackgroundWorkerService> logger,
-        IOptions<ServerStatisticsConfig> options
+        ILogger<BackgroundWorkerService> logger
     )
     {
         _connector = connector;
         _logger = logger;
-        _config = options.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -27,7 +24,7 @@ public class BackgroundWorkerService : BackgroundService
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             await _connector.StartAsync();
 
-            var delay = TimeSpan.FromSeconds(_config.SamplingIntervalSeconds);
+            var delay = TimeSpan.FromSeconds(EnviromentVeriables.SamplingIntervalSeconds);
 
             await Task.Delay(delay, stoppingToken);
         }

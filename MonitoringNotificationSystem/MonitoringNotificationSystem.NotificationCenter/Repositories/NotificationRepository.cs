@@ -11,11 +11,8 @@ public class NotificationRepository : INotificationRepository
 
     public NotificationRepository()
     {
-        var mongoUrl = Environment.GetEnvironmentVariable("MONGO_URL");
-        var mongoDB = Environment.GetEnvironmentVariable("MONGO_DB");
-
-        var client = new MongoClient(mongoUrl);
-        _database = client.GetDatabase(mongoDB);
+        var client = new MongoClient(EnviromentVeriables.mongoUrl);
+        _database = client.GetDatabase(EnviromentVeriables.mongoDB);
         _collection = _database.GetCollection<ServerStatistics>(collectionName);
     }
 

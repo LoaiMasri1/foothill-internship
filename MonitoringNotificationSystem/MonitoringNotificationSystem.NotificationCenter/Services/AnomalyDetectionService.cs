@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Options;
 using MonitoringNotificationSystem.NotificationCenter.Hubs;
-using MonitoringNotificationSystem.Shared.Configurations;
 using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Services;
@@ -9,17 +7,10 @@ namespace MonitoringNotificationSystem.NotificationCenter.Services;
 public class AnomalyDetectionService : IAnomalyDetectionService
 {
     private static ServerStatistics _previousStatistics = new();
-    private static AnomalyDetectionConfig _anomalyDetectionConfig = new();
     private readonly IHubContext<NotificationHub, IStatisticsClient> _hub;
 
-    public AnomalyDetectionService(
-        IOptions<AnomalyDetectionConfig> anomalyDetectionConfig,
-        IHubContext<NotificationHub, IStatisticsClient> hub
-    )
-    {
-        _anomalyDetectionConfig = anomalyDetectionConfig.Value;
+    public AnomalyDetectionService(IHubContext<NotificationHub, IStatisticsClient> hub) =>
         _hub = hub;
-    }
 
     public void CheckAndSendAnomalyAlerts(ServerStatistics statistics)
     {
@@ -52,21 +43,21 @@ public class AnomalyDetectionService : IAnomalyDetectionService
 
     private static bool IsMemoryUsageAnomaly(ServerStatistics statistics) =>
         CalculatePercentageChange(_previousStatistics.MemoryUsage, statistics.MemoryUsage)
-        > _anomalyDetectionConfig.MemoryUsageAnomalyThresholdPercentage;
+        > EnviromentVeriables.MemoryUsageAnomalyThresholdPercentage;
 
     private static bool IsCpuUsageAnomaly(ServerStatistics statistics) =>
         CalculatePercentageChange(_previousStatistics.CpuUsage, statistics.CpuUsage)
-        > _anomalyDetectionConfig.CpuUsageAnomalyThresholdPercentage;
+        > EnviromentVeriables.CpuUsageAnomalyThresholdPercentage;
 
     private static bool IsMemoryHighUsage(ServerStatistics statistics)
     {
         double memoryUsagePercentage =
             statistics.MemoryUsage / (statistics.MemoryUsage + statistics.AvailableMemory);
-        return memoryUsagePercentage > _anomalyDetectionConfig.MemoryUsageThresholdPercentage;
+        return memoryUsagePercentage > EnviromentVeriables.MemoryUsageThresholdPercentage;
     }
 
     private static bool IsCpuHighUsage(ServerStatistics statistics) =>
-        statistics.CpuUsage > _anomalyDetectionConfig.CpuUsageThresholdPercentage;
+        statistics.CpuUsage > EnviromentVeriables.CpuUsageThresholdPercentage;
 
     private static double CalculatePercentageChange(double previousValue, double currentValue)
     {
