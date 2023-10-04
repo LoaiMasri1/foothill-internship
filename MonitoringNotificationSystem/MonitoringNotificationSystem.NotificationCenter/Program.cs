@@ -1,4 +1,4 @@
-using MonitoringNotificationSystem.NotificationCenter;
+using MonitoringNotificationSystem.NotificationCenter.Hubs;
 using MonitoringNotificationSystem.NotificationCenter.Setups;
 using MonitoringNotificationSystem.Shared.Configurations;
 
