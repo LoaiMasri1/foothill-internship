@@ -40,7 +40,7 @@
     private List<ServerStatistics> statistics = new();
     private List<string> anomalies = new();
 
-    private string signalRUrl = "https://localhost:7079/notification-hub";
+    private string signalRUrl = Environment.GetEnvironmentVariable("SIGNALR_URL")!;
 
     protected override async Task OnInitializedAsync()
     {

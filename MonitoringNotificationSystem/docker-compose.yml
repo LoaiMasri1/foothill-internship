@@ -6,17 +6,33 @@ services:
     build:
       context: .
       dockerfile: MonitoringNotificationSystem.NotificationCenter/Dockerfile
+    networks:
+      - monitoringnotificationsystem
+    environment:
+      - "RABBITMQ_USER=guest"
+      - "RABBITMQ_PASSWORD=guest"
+      - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
+      - "MONGO_URL=mongodb://monitoringnotificationsystem.mongo:27017"
+      - "MONGO_DB=monitoringnotificationsystem"
     depends_on:
       - monitoringnotificationsystem.mongo
       - monitoringnotificationsystem.rabbitmq
+
 
   monitoringnotificationsystem.server:
     image: ${DOCKER_REGISTRY-}monitoringnotificationsystemserver
     build:
       context: .
       dockerfile: MonitoringNotificationSystem.Server/Dockerfile
+    networks:
+      - monitoringnotificationsystem
+    environment:
+      - "RABBITMQ_USER=guest"
+      - "RABBITMQ_PASSWORD=guest"
+      - "RABBITMQ_HOST=monitoringnotificationsystem.rabbitmq"
     depends_on:
       - monitoringnotificationsystem.rabbitmq
+
 
 
   monitoringnotificationsystem.webapp:
@@ -28,11 +44,15 @@ services:
       - "80:8080"
     depends_on:
       - monitoringnotificationsystem.notificationcenter
+    networks:
+      - monitoringnotificationsystem
 
   monitoringnotificationsystem.mongo:
      image: docker.io/library/mongo:latest
      ports:
      - "27017:27017"
+     networks:
+     - monitoringnotificationsystem
      volumes:
      - mongo:/data/db
 
@@ -41,8 +61,17 @@ services:
     ports:
       - "5672:5672"
       - "8080:15672"
+    environment:
+    - "SIGNALR_URL=http://monitoringnotificationsystem.notificationcenter/notification-hub"
+
+    networks:
+      - monitoringnotificationsystem
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+
+networks:
+  monitoringnotificationsystem:
+    driver: bridge
 
 volumes:
   mongo:
