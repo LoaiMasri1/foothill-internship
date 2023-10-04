@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MonitoringNotificationSystem.Server\MonitoringNotificationSystem.Server.csproj" />
+  </ItemGroup>
+
 </Project>
