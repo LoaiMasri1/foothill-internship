@@ -24,6 +24,8 @@ builder.Services.AddSingleton<IAnomalyDetectionService, AnomalyDetectionService>
 
 builder.Services.AddSingleton<Connector>();
 
+builder.Services.AddHostedService<BackgroundWorkerService>();
+
 var app = builder.Build();
 
 app.MapHub<NotificationHub>("/notification-hub");

@@ -5,7 +5,7 @@ namespace MonitoringNotificationSystem.NotificationCenter.Setups;
 public class MongoDBConfigSetup : IConfigureOptions<MongoDBConfig>
 {
     private readonly IConfiguration _configuration;
-    private const string _sectionName = "MongoDBConfig";
+    private const string _sectionName = "MongoDB";
 
     public MongoDBConfigSetup(IConfiguration configuration)
     {
