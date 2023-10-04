@@ -25,7 +25,7 @@ public class BackgroundWorkerService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            _connector.Start();
+            await _connector.StartAsync();
 
             var delay = TimeSpan.FromSeconds(_config.SamplingIntervalSeconds);
 

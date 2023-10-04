@@ -16,7 +16,7 @@ public class RabbitMQMessageBroker : IMessageBroker
         _channel = CreateConnection().CreateModel();
     }
 
-    public void Subscribe<T>(
+    public async Task SubscribeAsync<T>(
         string topicName,
         string routingKeyPattern,
         Action<T> onMessageReceived
@@ -40,6 +40,8 @@ public class RabbitMQMessageBroker : IMessageBroker
         };
 
         _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+
+        await Task.Delay(Timeout.Infinite);
     }
 
     public void Publish<T>(string topicName, string routingKey, T message)

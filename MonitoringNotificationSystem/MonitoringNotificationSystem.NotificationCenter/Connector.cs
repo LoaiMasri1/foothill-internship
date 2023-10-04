@@ -39,13 +39,13 @@ public class Connector
         _anomalyDetectionService = anomalyDetectionService;
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
         var topic = $"ServerStatistics.{_serverStatisticsConfig.ServerIdentifier}";
         _logger.LogInformation("Starting connector {}", topic);
         try
         {
-            _broker.Subscribe<ServerStatistics>(
+            await _broker.SubscribeAsync<ServerStatistics>(
                 topic,
                 topic,
                 async (statistics) =>
