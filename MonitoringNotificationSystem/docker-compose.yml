@@ -20,3 +20,14 @@ services:
       context: .
       dockerfile: MonitoringNotificationSystem.Webapp/Dockerfile
 
+  monitoringnotificationsystem.mongo:
+     image: docker.io/library/mongo:latest
+     ports:
+     - "27017:27017"
+
+  monitoringnotificationsystem.rabbitmq:
+    image: docker.io/library/rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "8080:15672"
+
