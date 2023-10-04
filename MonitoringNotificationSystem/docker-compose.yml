@@ -6,12 +6,17 @@ services:
     build:
       context: .
       dockerfile: MonitoringNotificationSystem.NotificationCenter/Dockerfile
+    depends_on:
+      - monitoringnotificationsystem.mongo
+      - monitoringnotificationsystem.rabbitmq
 
   monitoringnotificationsystem.server:
     image: ${DOCKER_REGISTRY-}monitoringnotificationsystemserver
     build:
       context: .
       dockerfile: MonitoringNotificationSystem.Server/Dockerfile
+    depends_on:
+      - monitoringnotificationsystem.rabbitmq
 
 
   monitoringnotificationsystem.webapp:
@@ -19,6 +24,10 @@ services:
     build:
       context: .
       dockerfile: MonitoringNotificationSystem.Webapp/Dockerfile
+    ports:
+      - "80:8080"
+    depends_on:
+      - monitoringnotificationsystem.notificationcenter
 
   monitoringnotificationsystem.mongo:
      image: docker.io/library/mongo:latest
