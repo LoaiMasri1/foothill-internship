@@ -18,23 +18,25 @@ public class Connector
     private readonly RabbitMQMessageBroker _broker;
     private readonly INotificationRepository _notificationRepository;
     private readonly IAnomalyDetectionService _anomalyDetectionService;
-    private const string RabbitMQConnectionStringKey = "RabbitMQ";
 
     public Connector(
         IHubContext<NotificationHub, IStatisticsClient> hubContext,
         IOptions<ServerStatisticsConfig> serverStatisticsConfig,
         ILogger<Connector> logger,
-        IConfiguration configuration,
         INotificationRepository notificationRepository,
         IAnomalyDetectionService anomalyDetectionService
     )
     {
+        var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+        var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+        var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+
+        var rabbitMQConnectionString =
+            $"amqp://{rabbitMQUser}:{rabbitMQPassword}@{rabbitMQHost}";
         _hub = hubContext;
         _serverStatisticsConfig = serverStatisticsConfig.Value;
         _logger = logger;
-        _broker = new RabbitMQMessageBroker(
-            configuration.GetConnectionString(RabbitMQConnectionStringKey)!
-        );
+        _broker = new RabbitMQMessageBroker(rabbitMQConnectionString);
         _notificationRepository = notificationRepository;
         _anomalyDetectionService = anomalyDetectionService;
     }

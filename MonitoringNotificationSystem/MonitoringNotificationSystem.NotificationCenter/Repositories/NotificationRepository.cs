@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using MonitoringNotificationSystem.Shared.Configurations;
+﻿using MongoDB.Driver;
 using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Repositories;
@@ -11,10 +9,13 @@ public class NotificationRepository : INotificationRepository
     private readonly IMongoCollection<ServerStatistics> _collection;
     private const string collectionName = "Statistics";
 
-    public NotificationRepository(IOptions<MongoDBConfig> options)
+    public NotificationRepository()
     {
-        var client = new MongoClient(options.Value.ConnectionString);
-        _database = client.GetDatabase(options.Value.DatabaseName);
+        var mongoUrl = Environment.GetEnvironmentVariable("MONGO_URL");
+        var mongoDB = Environment.GetEnvironmentVariable("MONGO_DB");
+
+        var client = new MongoClient(mongoUrl);
+        _database = client.GetDatabase(mongoDB);
         _collection = _database.GetCollection<ServerStatistics>(collectionName);
     }
 

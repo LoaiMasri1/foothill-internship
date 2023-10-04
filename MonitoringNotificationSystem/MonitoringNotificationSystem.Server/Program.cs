@@ -3,18 +3,21 @@ using MonitoringNotificationSystem.MessageBroker;
 using MonitoringNotificationSystem.Server;
 using MonitoringNotificationSystem.Shared.Configurations;
 
+var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
+var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+
 var serverStaticsConfig = new ServerStatisticsConfig();
 
 const string appSettingsFileName = "appsettings.json";
-const string RabbitMQConnectionStringKey = "RabbitMQ";
+
+var rabbitMQConnectionString = $"amqp://{rabbitMQUser}:{rabbitMQPassword}@{rabbitMQHost}";
 
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile(appSettingsFileName, optional: true, reloadOnChange: true)
     .Build();
 
 configuration.GetSection(nameof(ServerStatisticsConfig)).Bind(serverStaticsConfig);
-
-var rabbitMQConnectionString = configuration.GetConnectionString(RabbitMQConnectionStringKey)!;
 
 IMessageBroker messageBroker = new RabbitMQMessageBroker(rabbitMQConnectionString);
 
