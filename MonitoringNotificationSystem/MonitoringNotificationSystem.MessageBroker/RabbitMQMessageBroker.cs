@@ -9,8 +9,8 @@ public class RabbitMQMessageBroker : IMessageBroker
 {
     private readonly string _connectionString;
     private readonly IModel _channel;
-    private const int maxRetryCount = 3;
-    private const int delayBetweenRetries = 5;
+    private const int maxRetryCount = 5;
+    private const int delayBetweenRetries = 10;
 
     public RabbitMQMessageBroker(string connectionString)
     {
