@@ -1,6 +1,6 @@
 ﻿using MonitoringNotificationSystem.Shared.Data;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Services;
+namespace MonitoringNotificationSystem.NotificationCenter.Services.Anamoly;
 
 public interface IAnomalyDetectionService
 {

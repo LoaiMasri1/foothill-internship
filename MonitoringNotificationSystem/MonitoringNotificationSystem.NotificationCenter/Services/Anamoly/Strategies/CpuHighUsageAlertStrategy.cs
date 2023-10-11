@@ -1,6 +1,6 @@
 ﻿using MonitoringNotificationSystem.Shared.Data;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Services.Strategies;
+namespace MonitoringNotificationSystem.NotificationCenter.Services.Anamoly.Strategies;
 
 public class CpuHighUsageAlertStrategy : IAnomalyAlertStrategy
 {

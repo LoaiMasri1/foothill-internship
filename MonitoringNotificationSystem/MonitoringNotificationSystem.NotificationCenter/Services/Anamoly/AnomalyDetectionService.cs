@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using MonitoringNotificationSystem.NotificationCenter.Hubs;
 using MonitoringNotificationSystem.NotificationCenter.Repositories;
-using MonitoringNotificationSystem.NotificationCenter.Services.Strategies;
+using MonitoringNotificationSystem.NotificationCenter.Services.Anamoly;
+using MonitoringNotificationSystem.NotificationCenter.Services.Anamoly.Strategies;
 using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Services;
