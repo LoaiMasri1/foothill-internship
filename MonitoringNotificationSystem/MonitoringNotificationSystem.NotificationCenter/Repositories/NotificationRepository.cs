@@ -1,21 +1,20 @@
 ﻿using MongoDB.Driver;
-using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Repositories;
 
 public class NotificationRepository : INotificationRepository
 {
-    private readonly IMongoDatabase _database;
-    private readonly IMongoCollection<ServerStatistics> _collection;
-    private const string collectionName = "Statistics";
+    private readonly IMongoCollection<MongoServerStatistics> _collection;
 
-    public NotificationRepository()
-    {
-        var client = new MongoClient(EnviromentVeriables.mongoUrl);
-        _database = client.GetDatabase(EnviromentVeriables.mongoDB);
-        _collection = _database.GetCollection<ServerStatistics>(collectionName);
-    }
+    public NotificationRepository(IMongoCollection<MongoServerStatistics> collection) =>
+        _collection = collection;
 
-    public async Task SaveStatisticsAsync(ServerStatistics statistics) =>
+    public async Task SaveStatisticsAsync(MongoServerStatistics statistics) =>
         await _collection.InsertOneAsync(statistics);
+
+    public async Task<MongoServerStatistics> GetLastAsync() =>
+        await _collection
+            .Find(FilterDefinition<MongoServerStatistics>.Empty)
+            .SortByDescending(s => s.Timestamp)
+            .FirstOrDefaultAsync();
 }

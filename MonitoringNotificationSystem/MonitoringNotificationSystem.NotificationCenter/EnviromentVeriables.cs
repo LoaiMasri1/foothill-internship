@@ -1,18 +1,21 @@
 ﻿namespace MonitoringNotificationSystem.NotificationCenter;
 
-public static class EnviromentVeriables
+public class EnviromentVeriables
 {
     public static readonly string mongoUrl = Environment.GetEnvironmentVariable("MONGO_URL")!;
     public static readonly string mongoDB = Environment.GetEnvironmentVariable("MONGO_DB")!;
-    public static readonly string rabbitMQUser = Environment.GetEnvironmentVariable(
+    private static readonly string rabbitMQUser = Environment.GetEnvironmentVariable(
         "RABBITMQ_USER"
     )!;
-    public static readonly string rabbitMQPassword = Environment.GetEnvironmentVariable(
+    private static readonly string rabbitMQPassword = Environment.GetEnvironmentVariable(
         "RABBITMQ_PASSWORD"
     )!;
-    public static readonly string rabbitMQHost = Environment.GetEnvironmentVariable(
+    private static readonly string rabbitMQHost = Environment.GetEnvironmentVariable(
         "RABBITMQ_HOST"
     )!;
+
+    public static readonly string rabbitMQConnectionString =
+        $"amqp://{rabbitMQUser}:{rabbitMQPassword}@{rabbitMQHost}";
 
     public static readonly double MemoryUsageAnomalyThresholdPercentage = double.Parse(
         Environment.GetEnvironmentVariable("MEMORY_USAGE_ANOMALY_THRESHOLD_PERCENTAGE")!

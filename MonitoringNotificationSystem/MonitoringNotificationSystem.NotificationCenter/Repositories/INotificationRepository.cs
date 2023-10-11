@@ -1,8 +1,17 @@
-﻿using MonitoringNotificationSystem.Shared.Data;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Repositories;
 
 public interface INotificationRepository
 {
-    Task SaveStatisticsAsync(ServerStatistics statistics);
+    Task SaveStatisticsAsync(MongoServerStatistics statistics);
+    Task<MongoServerStatistics> GetLastAsync();
+}
+
+public class MongoServerStatistics : ServerStatistics
+{
+    [BsonId]
+    public ObjectId Id { get; set; }
 }

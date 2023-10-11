@@ -2,6 +2,7 @@
 using MonitoringNotificationSystem.Shared.Configurations;
 
 namespace MonitoringNotificationSystem.NotificationCenter.Setups;
+
 public class MongoDBConfigSetup : IConfigureOptions<MongoDBConfig>
 {
     private readonly IConfiguration _configuration;

@@ -48,7 +48,6 @@ public class ServerStatisticsCollector
 
                 _messageBroker.Publish(
                     $"ServerStatistics.{_statisticsConfig.ServerIdentifier}",
-                    $"ServerStatistics.{_statisticsConfig.ServerIdentifier}",
                     state
                 );
 

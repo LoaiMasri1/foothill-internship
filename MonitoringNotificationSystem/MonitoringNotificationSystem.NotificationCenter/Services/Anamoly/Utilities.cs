@@ -1,4 +1,4 @@
-﻿namespace MonitoringNotificationSystem.NotificationCenter.Services.Strategies;
+﻿namespace MonitoringNotificationSystem.NotificationCenter.Services.Anamoly;
 
 public static class Utilities
 {
