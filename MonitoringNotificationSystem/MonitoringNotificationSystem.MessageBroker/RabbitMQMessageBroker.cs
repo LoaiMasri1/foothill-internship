@@ -2,6 +2,7 @@
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace MonitoringNotificationSystem.MessageBroker;
 
@@ -9,40 +10,38 @@ public class RabbitMQMessageBroker : IMessageBroker
 {
     private readonly string _connectionString;
     private readonly IModel _channel;
-    private const int maxRetryCount = 5;
-    private const int delayBetweenRetries = 10;
+    private readonly int _maxRetryCount;
+    private readonly int _delayBetweenRetries;
 
-    public RabbitMQMessageBroker(string connectionString)
+    public RabbitMQMessageBroker(
+        string connectionString,
+        int maxRetryCount = 5,
+        int delayBetweenRetries = 10
+    )
     {
         _connectionString = connectionString;
-        _channel = CreateConnectionWithRetry(
-                maxRetryCount,
-                delayBetweenRetries: TimeSpan.FromSeconds(delayBetweenRetries)
-            )
-            .CreateModel();
+        _maxRetryCount = maxRetryCount;
+        _delayBetweenRetries = delayBetweenRetries;
+        _channel = CreateModel();
     }
 
-    public async Task SubscribeAsync<T>(
-        string topicName,
-        string routingKeyPattern,
-        Action<T> onMessageReceived
-    )
+    public async Task SubscribeAsync<T>(string topicName, Func<T, Task> onMessageReceived)
     {
         _channel.ExchangeDeclare(exchange: topicName, type: ExchangeType.Topic);
 
         var queueName = _channel.QueueDeclare().QueueName;
 
-        _channel.QueueBind(queue: queueName, exchange: topicName, routingKey: routingKeyPattern);
+        _channel.QueueBind(queue: queueName, exchange: topicName, routingKey: topicName);
 
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             var deserializedMessage = JsonSerializer.Deserialize<T>(message);
 
-            onMessageReceived(deserializedMessage!);
+            await onMessageReceived(deserializedMessage!);
         };
 
         _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
@@ -50,7 +49,7 @@ public class RabbitMQMessageBroker : IMessageBroker
         await Task.Delay(Timeout.Infinite);
     }
 
-    public void Publish<T>(string topicName, string routingKey, T message)
+    public void Publish<T>(string topicName, T message)
     {
         _channel.ExchangeDeclare(exchange: topicName, type: ExchangeType.Topic);
 
@@ -59,44 +58,21 @@ public class RabbitMQMessageBroker : IMessageBroker
 
         _channel.BasicPublish(
             exchange: topicName,
-            routingKey: routingKey,
+            routingKey: topicName,
             basicProperties: null,
             body: body
         );
     }
 
-    private IConnection CreateConnectionWithRetry(
-        int maxRetryCount = 3,
-        TimeSpan delayBetweenRetries = default
-    )
+    private IConnection CreateConnectionWithRetry()
     {
-        var factory = new ConnectionFactory { Uri = new Uri(_connectionString) };
-        int retryCount = 0;
+        var policy = Utilities.Polly.CreateRetryPolicy<BrokerUnreachableException>(
+            _maxRetryCount,
+            delayBetweenRetries: TimeSpan.FromSeconds(_delayBetweenRetries)
+        );
 
-        while (true)
-        {
-            try
-            {
-                return factory.CreateConnection();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"Error creating connection. Retry count: {retryCount + 1}. Exception: {ex}"
-                );
-
-                if (++retryCount >= maxRetryCount)
-                {
-                    Console.WriteLine($"Max retry count reached. Giving up.");
-                    throw;
-                }
-
-                if (delayBetweenRetries != default)
-                {
-                    Console.WriteLine($"Retrying in {delayBetweenRetries.TotalSeconds} seconds...");
-                    Thread.Sleep(delayBetweenRetries);
-                }
-            }
-        }
+        return policy.Execute(() => Utilities.RabbitMQ.CreateConnection(_connectionString));
     }
+
+    private IModel CreateModel() => CreateConnectionWithRetry().CreateModel();
 }

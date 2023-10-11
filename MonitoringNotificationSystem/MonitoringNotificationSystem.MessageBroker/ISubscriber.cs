@@ -2,5 +2,5 @@
 
 public interface ISubscriber
 {
-    Task SubscribeAsync<T>(string topicName, string routingKeyPattern, Action<T> onMessageReceived);
+    Task SubscribeAsync<TMessage>(string topicName, Func<TMessage, Task> onMessageReceived);
 }
