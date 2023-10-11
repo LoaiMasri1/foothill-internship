@@ -51,8 +51,6 @@ services:
       dockerfile: MonitoringNotificationSystem.Webapp/Dockerfile
     environment:
     - "SIGNALR_URL=http://monitoringnotificationsystem.notificationcenter/notification-hub"
-    ports:
-      - "80:8080"
     depends_on:
       - monitoringnotificationsystem.notificationcenter
       - monitoringnotificationsystem.server
