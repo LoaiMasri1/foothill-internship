@@ -15,6 +15,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoringNotificationSyste
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{40A3FC58-FB5A-463D-9C8C-8FAC30BDE696}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{44B959BB-7566-4E49-B087-CE732CDC5A5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC4A896E-6992-4723-B92A-A9F1E2777272}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.Server.Test", "MonitoringNotificationSystem.Server.Test\MonitoringNotificationSystem.Server.Test.csproj", "{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNotificationSystem.NotificationPorcessor.Test", "MonitoringNotificationSystem.NotificationPorcessor.Test\MonitoringNotificationSystem.NotificationPorcessor.Test.csproj", "{C4F41BC9-079F-4E76-8355-2D9C8F300778}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +53,26 @@ Global
 		{40A3FC58-FB5A-463D-9C8C-8FAC30BDE696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40A3FC58-FB5A-463D-9C8C-8FAC30BDE696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40A3FC58-FB5A-463D-9C8C-8FAC30BDE696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4F41BC9-079F-4E76-8355-2D9C8F300778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4F41BC9-079F-4E76-8355-2D9C8F300778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4F41BC9-079F-4E76-8355-2D9C8F300778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4F41BC9-079F-4E76-8355-2D9C8F300778}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{170DEF3F-F045-4EF8-909C-6A6397F2E5A9} = {44B959BB-7566-4E49-B087-CE732CDC5A5B}
+		{AD81FC3B-0B29-43AF-9DC3-EF2D293957CF} = {44B959BB-7566-4E49-B087-CE732CDC5A5B}
+		{8AE84BEA-CA6E-44AE-BEE9-6D34D69C6E97} = {44B959BB-7566-4E49-B087-CE732CDC5A5B}
+		{3DBC29B7-132C-4DE8-B2F1-420C2F225714} = {44B959BB-7566-4E49-B087-CE732CDC5A5B}
+		{07827554-3151-42A8-9083-64EB7DED4653} = {44B959BB-7566-4E49-B087-CE732CDC5A5B}
+		{BCB1551A-24AC-47D4-8AE2-B3F6237A7F94} = {AC4A896E-6992-4723-B92A-A9F1E2777272}
+		{C4F41BC9-079F-4E76-8355-2D9C8F300778} = {AC4A896E-6992-4723-B92A-A9F1E2777272}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4631A02C-99B8-4A4E-AA68-221B88063A03}
