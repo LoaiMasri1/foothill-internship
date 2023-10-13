@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using MonitoringNotificationSystem.NotificationCenter.Hubs;
-using MonitoringNotificationSystem.NotificationCenter.Repositories;
-using MonitoringNotificationSystem.NotificationCenter.Services;
-using MonitoringNotificationSystem.NotificationCenter.Services.Anamoly;
-using MonitoringNotificationSystem.NotificationCenter.Services.Anamoly.Strategies;
+using MonitoringNotificationSystem.NotificationProcessor.Hubs;
+using MonitoringNotificationSystem.NotificationProcessor.Repositories;
+using MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly;
+using MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly.Strategies;
 
-namespace MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
+namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 
 public static class ServiceExtentions
 {

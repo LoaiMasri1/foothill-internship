@@ -1,4 +1,4 @@
-﻿namespace MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
+﻿namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 
 public static class ConfigureDependencies
 {

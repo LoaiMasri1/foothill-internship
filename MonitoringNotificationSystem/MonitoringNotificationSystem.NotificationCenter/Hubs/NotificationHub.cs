@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Hubs;
+namespace MonitoringNotificationSystem.NotificationProcessor.Hubs;
 
 public class NotificationHub : Hub<IStatisticsClient>
 {

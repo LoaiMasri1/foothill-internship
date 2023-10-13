@@ -1,4 +1,4 @@
-﻿namespace MonitoringNotificationSystem.NotificationCenter.Hubs;
+﻿namespace MonitoringNotificationSystem.NotificationProcessor.Hubs;
 
 public interface IStatisticsClient
 {

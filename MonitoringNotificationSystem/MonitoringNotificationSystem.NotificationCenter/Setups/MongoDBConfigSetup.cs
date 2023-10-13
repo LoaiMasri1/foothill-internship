@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MonitoringNotificationSystem.Shared.Configurations;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Setups;
+namespace MonitoringNotificationSystem.NotificationProcessor.Setups;
 
 public class MongoDBConfigSetup : IConfigureOptions<MongoDBConfig>
 {

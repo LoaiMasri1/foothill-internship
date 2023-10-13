@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using MonitoringNotificationSystem.Shared.Configurations;
 
-namespace MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
+namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 
 public static class MongoExtentions
 {

@@ -1,5 +1,5 @@
-using MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
-using MonitoringNotificationSystem.NotificationCenter.Hubs;
+using MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
+using MonitoringNotificationSystem.NotificationProcessor.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

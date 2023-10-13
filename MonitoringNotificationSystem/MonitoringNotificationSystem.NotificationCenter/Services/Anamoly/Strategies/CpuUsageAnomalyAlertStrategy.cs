@@ -1,6 +1,8 @@
-﻿using MonitoringNotificationSystem.Shared.Data;
+﻿using MonitoringNotificationSystem.NotificationProcessor;
+using MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly;
+using MonitoringNotificationSystem.Shared.Data;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Services.Anamoly.Strategies;
+namespace MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly.Strategies;
 
 public class CpuUsageAnomalyAlertStrategy : IAnomalyAlertStrategy
 {

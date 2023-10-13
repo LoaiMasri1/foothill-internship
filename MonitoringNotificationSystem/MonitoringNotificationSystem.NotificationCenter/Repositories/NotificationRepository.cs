@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Repositories;
+namespace MonitoringNotificationSystem.NotificationProcessor.Repositories;
 
 public class NotificationRepository : INotificationRepository
 {

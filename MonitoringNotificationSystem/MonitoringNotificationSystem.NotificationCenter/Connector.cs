@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using MonitoringNotificationSystem.MessageBroker;
-using MonitoringNotificationSystem.NotificationCenter.Hubs;
-using MonitoringNotificationSystem.NotificationCenter.Repositories;
-using MonitoringNotificationSystem.NotificationCenter.Services.Anamoly;
+using MonitoringNotificationSystem.NotificationProcessor.Hubs;
+using MonitoringNotificationSystem.NotificationProcessor.Repositories;
+using MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly;
 using MonitoringNotificationSystem.Shared.Data;
 using System.Text.Json;
 
-namespace MonitoringNotificationSystem.NotificationCenter;
+namespace MonitoringNotificationSystem.NotificationProcessor;
 
 public class Connector
 {

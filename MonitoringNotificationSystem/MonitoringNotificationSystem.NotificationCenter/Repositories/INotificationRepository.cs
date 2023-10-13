@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MonitoringNotificationSystem.Shared.Data;
 
-namespace MonitoringNotificationSystem.NotificationCenter.Repositories;
+namespace MonitoringNotificationSystem.NotificationProcessor.Repositories;
 
 public interface INotificationRepository
 {

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
-using MonitoringNotificationSystem.NotificationCenter.Repositories;
+using MonitoringNotificationSystem.NotificationProcessor.Repositories;
 
-namespace MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
+namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 
 public static class RepositoryExtentions
 {

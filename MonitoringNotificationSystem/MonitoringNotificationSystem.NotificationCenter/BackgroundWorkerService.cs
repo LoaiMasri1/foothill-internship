@@ -1,4 +1,4 @@
-﻿namespace MonitoringNotificationSystem.NotificationCenter;
+﻿namespace MonitoringNotificationSystem.NotificationProcessor;
 
 public class BackgroundWorkerService : BackgroundService
 {

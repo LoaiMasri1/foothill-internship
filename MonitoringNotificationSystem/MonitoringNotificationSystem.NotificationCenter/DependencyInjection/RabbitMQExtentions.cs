@@ -1,6 +1,7 @@
 ﻿using MonitoringNotificationSystem.MessageBroker;
+using MonitoringNotificationSystem.NotificationProcessor;
 
-namespace MonitoringNotificationSystem.NotificationCenter.DependencyInjection;
+namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 
 public static class RabbitMQExtentions
 {
