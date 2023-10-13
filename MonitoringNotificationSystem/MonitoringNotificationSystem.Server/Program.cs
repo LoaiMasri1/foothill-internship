@@ -2,6 +2,8 @@
 using MonitoringNotificationSystem.Server;
 using MonitoringNotificationSystem.Shared.Configurations;
 
+using ServerUtilities = MonitoringNotificationSystem.Server.Utilities;
+
 var rabbitMQUser = Environment.GetEnvironmentVariable("RABBITMQ_USER");
 var rabbitMQPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
@@ -21,6 +23,12 @@ var rabbitMQConnectionString = $"amqp://{rabbitMQUser}:{rabbitMQPassword}@{rabbi
 
 IMessageBroker messageBroker = new RabbitMQMessageBroker(rabbitMQConnectionString);
 
-var serverStatisticsCollector = new ServerStatisticsCollector(serverStaticsConfig, messageBroker);
+var serverStatisticsCollector = new ServerStatisticsCollector(
+    serverStaticsConfig.ServerIdentifier,
+    messageBroker
+);
 
-await serverStatisticsCollector.StartAsync();
+ServerUtilities.PeriodicServerStatisticsPublisherAsync(
+    serverStatisticsCollector,
+    serverStaticsConfig.SamplingIntervalSeconds
+);

@@ -1,21 +1,17 @@
 ﻿using MonitoringNotificationSystem.MessageBroker;
 using MonitoringNotificationSystem.Server.Readers;
-using MonitoringNotificationSystem.Shared.Configurations;
 using MonitoringNotificationSystem.Shared.Data;
 
 namespace MonitoringNotificationSystem.Server;
 
 public class ServerStatisticsCollector
 {
-    private readonly ServerStatisticsConfig _statisticsConfig;
+    private readonly string _serverIdentifier;
     private readonly IMessageBroker _messageBroker;
 
-    public ServerStatisticsCollector(
-        ServerStatisticsConfig statisticsConfig,
-        IMessageBroker messageBroker
-    )
+    public ServerStatisticsCollector(string serverIdentifier, IMessageBroker messageBroker)
     {
-        _statisticsConfig = statisticsConfig;
+        _serverIdentifier = serverIdentifier;
         _messageBroker = messageBroker;
     }
 
@@ -36,25 +32,12 @@ public class ServerStatisticsCollector
         return statistics;
     }
 
-    public async Task StartAsync()
+    public async Task PublishServerStatisticsAsync()
     {
-        await Task.Run(async () =>
-        {
-            while (true)
-            {
-                var state = CollectStatistics();
+        var state = CollectStatistics();
 
-                await Console.Out.WriteLineAsync("Memory usage: " + state.MemoryUsage + " MB");
+        await Console.Out.WriteLineAsync("Memory usage: " + state.MemoryUsage + " MB");
 
-                _messageBroker.Publish(
-                    $"ServerStatistics.{_statisticsConfig.ServerIdentifier}",
-                    state
-                );
-
-                var delay = TimeSpan.FromSeconds(_statisticsConfig.SamplingIntervalSeconds);
-
-                await Task.Delay(delay);
-            }
-        });
+        _messageBroker.Publish($"ServerStatistics.{_serverIdentifier}", state);
     }
 }
