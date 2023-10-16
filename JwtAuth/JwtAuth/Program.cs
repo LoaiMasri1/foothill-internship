@@ -1,7 +1,13 @@
+using JwtAuth.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services = builder.Services;
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.ConfigureServices();
 
 var app = builder.Build();
 
@@ -12,5 +18,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
