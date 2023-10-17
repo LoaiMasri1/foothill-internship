@@ -5,12 +5,14 @@ namespace JwtAuth.DependencyInjection;
 
 public static class AuthenticationExtentions
 {
-    public static IServiceCollection AddAuth(this IServiceCollection services)
+    public static IServiceCollection AddAuthenticationAndAuthorization(
+        this IServiceCollection services
+    )
     {
-        services
-            .AddJwtConfigurations()
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+        services.AddJwtConfigurations();
+        services.AddAuthorization();
 
         return services;
     }
