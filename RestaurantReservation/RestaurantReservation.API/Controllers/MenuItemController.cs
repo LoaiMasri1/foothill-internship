@@ -9,9 +9,13 @@ namespace RestaurantReservation.API.Controllers;
 public class MenuItemController : ControllerBase
 {
     private readonly IMenuItemService _menuItemService;
+    private readonly IOrderItemService _orderItemService;
 
-    public MenuItemController(IMenuItemService menuItemService) =>
+    public MenuItemController(IMenuItemService menuItemService, IOrderItemService orderItemService)
+    {
         _menuItemService = menuItemService;
+        _orderItemService = orderItemService;
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateMenuItemAsync(MenuItemRequest menuItemRequest)
@@ -37,5 +41,13 @@ public class MenuItemController : ControllerBase
         var menuItemResponse = await _menuItemService.UpdateMenuItemAsync(id, menuItemRequest);
 
         return Ok(menuItemResponse);
+    }
+
+    [HttpGet("reservation/{reservationId:int}")]
+    public async Task<IActionResult> ListOrderedMenuItemsAsync(int reservationId)
+    {
+        var orderedMenuItems = await _orderItemService.ListOrderedMenuItemsAsync(reservationId);
+
+        return Ok(orderedMenuItems);
     }
 }

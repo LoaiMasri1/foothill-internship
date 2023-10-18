@@ -59,6 +59,7 @@ public class OrderItemService : IOrderItemService
     public async Task<IEnumerable<MenuItemResponse>> ListOrderedMenuItemsAsync(int reservationId)
     {
         var orderItems = await _orderItemRepository.ListOrderedMenuItemsAsync(reservationId);
+
         var response = orderItems.Select(
             x =>
                 new MenuItemResponse(
