@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -11,15 +12,28 @@ public class MenuItemService : IMenuItemService
 {
     private readonly IMenuItemRepository _menuItemRepository;
     private readonly IMapper _mapper;
+    private readonly IValidator<MenuItemRequest> _validator;
 
-    public MenuItemService(IMenuItemRepository menuItemRepository, IMapper mapper)
+    public MenuItemService(
+        IMenuItemRepository menuItemRepository,
+        IMapper mapper,
+        IValidator<MenuItemRequest> validator
+    )
     {
         _menuItemRepository = menuItemRepository;
         _mapper = mapper;
+        _validator = validator;
     }
 
     public async Task<MenuItemResponse> CreateMenuItemAsync(MenuItemRequest menuItemRequest)
     {
+        var validationResult = await _validator.ValidateAsync(menuItemRequest);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         var newMenuItem = _mapper.Map<MenuItem>(menuItemRequest);
         await _menuItemRepository.CreateMenuItemAsync(newMenuItem);
 
@@ -30,6 +44,13 @@ public class MenuItemService : IMenuItemService
 
     public async Task<MenuItemResponse> UpdateMenuItemAsync(int id, MenuItemRequest menuItemRequest)
     {
+        var validationResult = await _validator.ValidateAsync(menuItemRequest);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         var updatedMenuItem = _mapper.Map<MenuItem>(menuItemRequest);
 
         var menuItem = await _menuItemRepository.UpdateMenuItemAsync(id, updatedMenuItem);

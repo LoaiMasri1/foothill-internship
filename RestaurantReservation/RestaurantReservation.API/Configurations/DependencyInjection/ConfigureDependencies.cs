@@ -1,5 +1,7 @@
 ﻿namespace RestaurantReservation.API.Configurations.DependencyInjection;
 
+using FluentValidation;
+
 public static class ConfigureDependencies
 {
     public static IServiceCollection AddDependencies(this IServiceCollection services)
@@ -10,7 +12,8 @@ public static class ConfigureDependencies
             .AddController()
             .AddMapper()
             .AddSwagger()
-            .AddResturantReservationDbContext();
+            .AddResturantReservationDbContext()
+            .AddValidator();
 
         return services;
     }
@@ -25,6 +28,13 @@ public static class ConfigureDependencies
     private static IServiceCollection AddController(this IServiceCollection services)
     {
         services.AddControllers();
+
+        return services;
+    }
+
+    private static IServiceCollection AddValidator(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
         return services;
     }
