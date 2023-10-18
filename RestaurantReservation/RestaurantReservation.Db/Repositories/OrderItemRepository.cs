@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Repositories.Interfaces;
 using RestaurantReservation.Services;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class OrderItemRepository
+public class OrderItemRepository : IOrderItemRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -37,7 +38,8 @@ public class OrderItemRepository
 
     public async Task DeleteOrderItemAsync(int id)
     {
-        var orderItem = await _context.OrderItems.FindAsync(id)
+        var orderItem =
+            await _context.OrderItems.FindAsync(id)
             ?? throw new NotFoundException($"OrderItem with id {id} does not exist");
 
         _context.OrderItems.Remove(orderItem);
@@ -50,7 +52,9 @@ public class OrderItemRepository
         return exists;
     }
 
-    public async Task<IEnumerable<OrderMenuItemResponse>> ListOrdersAndMenuItemsAsync(int reservationId)
+    public async Task<IEnumerable<OrderMenuItemResponse>> ListOrdersAndMenuItemsAsync(
+        int reservationId
+    )
     {
         var orderItemsGrouped = await _context.OrderItems
             .Include(x => x.Order)
@@ -59,18 +63,24 @@ public class OrderItemRepository
             .GroupBy(x => x.OrderId)
             .ToListAsync();
 
-        var response = orderItemsGrouped.Select(orderGroup => new OrderMenuItemResponse
-        (
-            orderGroup.Key,
-            orderGroup.Select(x => new MenuItemResponse(
-                x.Item.ItemId,
-                x.Item.ResturantId,
-               x.Item.Name,
-                x.Item.Description,
-               x.Item.Price
-                )).ToList(),
-            orderGroup.Sum(x => x.Quantity)
-            )
+        var response = orderItemsGrouped.Select(
+            orderGroup =>
+                new OrderMenuItemResponse(
+                    orderGroup.Key,
+                    orderGroup
+                        .Select(
+                            x =>
+                                new MenuItemResponse(
+                                    x.Item.ItemId,
+                                    x.Item.ResturantId,
+                                    x.Item.Name,
+                                    x.Item.Description,
+                                    x.Item.Price
+                                )
+                        )
+                        .ToList(),
+                    orderGroup.Sum(x => x.Quantity)
+                )
         );
 
         return response;

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class EmployeeRepository
+public class EmployeeRepository : IEmployeeRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -35,7 +36,8 @@ public class EmployeeRepository
 
     public async Task DeleteEmployeeAsync(int id)
     {
-        var employee = await _context.Employees.FindAsync(id)
+        var employee =
+            await _context.Employees.FindAsync(id)
             ?? throw new NotFoundException($"Employee with id {id} does not exist");
 
         _context.Employees.Remove(employee);
@@ -50,9 +52,7 @@ public class EmployeeRepository
 
     public async Task<IEnumerable<Employee>> ListManagersAsync()
     {
-        var managers = await _context.Employees
-            .Where(x => x.Position == "Manager")
-            .ToListAsync();
+        var managers = await _context.Employees.Where(x => x.Position == "Manager").ToListAsync();
 
         return managers;
     }

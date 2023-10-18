@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class ReservationRepository
+public class ReservationRepository : IReservationRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -35,7 +36,8 @@ public class ReservationRepository
 
     public async Task DeleteReservationAsync(int id)
     {
-        var reservation = await _context.Reservations.FindAsync(id)
+        var reservation =
+            await _context.Reservations.FindAsync(id)
             ?? throw new NotFoundException($"Reservation with id {id} does not exist");
 
         _context.Reservations.Remove(reservation);
@@ -47,8 +49,8 @@ public class ReservationRepository
         var exists = await _context.Reservations.AnyAsync(x => x.ReservationsId == id);
         return exists;
     }
-    public async Task<IEnumerable<Reservation>> GetReservationsByCustomerAsync(
-        int customerId)
+
+    public async Task<IEnumerable<Reservation>> GetReservationsByCustomerAsync(int customerId)
     {
         var reservations = await _context.Reservations
             .Where(x => x.CustomerId == customerId)

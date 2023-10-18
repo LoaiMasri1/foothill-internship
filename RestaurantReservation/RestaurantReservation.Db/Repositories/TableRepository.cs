@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class TableRepository
+public class TableRepository : ITableRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -35,7 +36,8 @@ public class TableRepository
 
     public async Task DeleteTableAsync(int id)
     {
-        var table = await _context.Tables.FindAsync(id)
+        var table =
+            await _context.Tables.FindAsync(id)
             ?? throw new NotFoundException($"Table with id {id} does not exist");
 
         _context.Tables.Remove(table);
