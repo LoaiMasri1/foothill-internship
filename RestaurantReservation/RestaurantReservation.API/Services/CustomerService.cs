@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
+using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Repositories;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Services;
 
-public class CustomerService
+public class CustomerService : ICustomerService
 {
-    private readonly CustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IMapper _mapper;
 
     public CustomerService(CustomerRepository customerRepository, IMapper mapper)

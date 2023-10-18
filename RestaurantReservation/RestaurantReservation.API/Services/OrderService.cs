@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Repositories;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Services;
 
-public class OrderService
+public class OrderService : IOrderService
 {
-    private readonly OrderRepository _orderRepository;
+    private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
     public OrderService(OrderRepository orderRepository, IMapper mapper)
