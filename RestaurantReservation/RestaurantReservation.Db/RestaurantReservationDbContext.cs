@@ -5,9 +5,6 @@ namespace RestaurantReservation.Db;
 
 public class RestaurantReservationDbContext : DbContext
 {
-    private const string DbConnectionString =
-        "Server=localhost;Database=RestaurantReservationCore;User ID=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;";
-
     public RestaurantReservationDbContext() { }
 
     public RestaurantReservationDbContext(DbContextOptions<RestaurantReservationDbContext> options)
@@ -32,17 +29,6 @@ public class RestaurantReservationDbContext : DbContext
 
     public decimal CalculateRestaurantRevenue(int restaurantId) =>
         throw new NotSupportedException();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-        optionsBuilder.UseSqlServer(
-            DbConnectionString,
-            options =>
-                options.EnableRetryOnFailure(
-                    maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null
-                )
-        );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

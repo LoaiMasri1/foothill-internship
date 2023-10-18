@@ -4,7 +4,13 @@ public static class ConfigureDependencies
 {
     public static IServiceCollection AddDependencies(this IServiceCollection services)
     {
-        services.AddController().AddMapper().AddSwagger().AddRepositories().AddServices();
+        services
+            .AddController()
+            .AddMapper()
+            .AddSwagger()
+            .AddResturantReservationDbContext()
+            .AddRepositories()
+            .AddServices();
 
         return services;
     }
