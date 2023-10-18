@@ -1,8 +1,7 @@
-﻿using RestaurantReservation.Contracts.Responses;
-
-namespace RestaurantReservation.Services;
+﻿namespace RestaurantReservation.Contracts.Responses;
 
 public record OrderMenuItemResponse(
     int OrderId,
     IEnumerable<MenuItemResponse> MenuItems,
-    int Quantity);
+    int Quantity
+);

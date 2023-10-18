@@ -3,7 +3,7 @@ using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 
-namespace RestaurantReservation;
+namespace RestaurantReservation.API.Configurations;
 
 public class MapperProfile : Profile
 {

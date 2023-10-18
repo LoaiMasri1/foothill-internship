@@ -1,5 +1,5 @@
-﻿using RestaurantReservation.Db.Models;
-using RestaurantReservation.Services;
+﻿using RestaurantReservation.Contracts.Responses;
+using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db.Repositories.Interfaces
 {
