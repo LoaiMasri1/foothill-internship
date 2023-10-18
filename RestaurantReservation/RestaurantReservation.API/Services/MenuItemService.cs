@@ -3,7 +3,6 @@ using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
-using RestaurantReservation.Db.Repositories;
 using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Services;
@@ -13,7 +12,7 @@ public class MenuItemService : IMenuItemService
     private readonly IMenuItemRepository _menuItemRepository;
     private readonly IMapper _mapper;
 
-    public MenuItemService(MenuItemRepository menuItemRepository, IMapper mapper)
+    public MenuItemService(IMenuItemRepository menuItemRepository, IMapper mapper)
     {
         _menuItemRepository = menuItemRepository;
         _mapper = mapper;

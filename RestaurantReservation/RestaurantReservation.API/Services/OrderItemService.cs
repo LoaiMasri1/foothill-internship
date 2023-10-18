@@ -3,7 +3,6 @@ using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
-using RestaurantReservation.Db.Repositories;
 using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.API.Services;
@@ -13,7 +12,7 @@ public class OrderItemService : IOrderItemService
     private readonly IOrderItemRepository _orderItemRepository;
     private readonly IMapper _mapper;
 
-    public OrderItemService(OrderItemRepository orderItemRepository, IMapper mapper)
+    public OrderItemService(IOrderItemRepository orderItemRepository, IMapper mapper)
     {
         _orderItemRepository = orderItemRepository;
         _mapper = mapper;

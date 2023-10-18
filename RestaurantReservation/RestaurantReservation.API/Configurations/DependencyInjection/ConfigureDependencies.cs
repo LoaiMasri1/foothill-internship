@@ -5,12 +5,12 @@ public static class ConfigureDependencies
     public static IServiceCollection AddDependencies(this IServiceCollection services)
     {
         services
+            .AddRepositories()
+            .AddServices()
             .AddController()
             .AddMapper()
             .AddSwagger()
-            .AddResturantReservationDbContext()
-            .AddRepositories()
-            .AddServices();
+            .AddResturantReservationDbContext();
 
         return services;
     }
