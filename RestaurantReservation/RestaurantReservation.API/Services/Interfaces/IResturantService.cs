@@ -5,7 +5,7 @@ namespace RestaurantReservation.API.Services.Interfaces
 {
     public interface IResturantService
     {
-        decimal CalculateRestaurantRevenueAsync(int resturantId);
+        decimal CalculateRestaurantRevenue(int resturantId);
         Task<ResturantResponse> CreateResturantAsync(ResturantRequest resturantRequest);
         Task DeleteResturantAsync(int id);
         Task<ResturantResponse> UpdateResturantAsync(int id, ResturantRequest resturantRequest);

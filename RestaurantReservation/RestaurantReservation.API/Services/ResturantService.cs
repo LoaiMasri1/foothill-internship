@@ -46,7 +46,7 @@ public class ResturantService : IResturantService
         await _resturantRepository.DeleteResturantAsync(id);
     }
 
-    public decimal CalculateRestaurantRevenueAsync(int resturantId)
+    public decimal CalculateRestaurantRevenue(int resturantId)
     {
         var revenue = _resturantRepository.CalculateRestaurantRevenueAsync(resturantId);
         return revenue;
