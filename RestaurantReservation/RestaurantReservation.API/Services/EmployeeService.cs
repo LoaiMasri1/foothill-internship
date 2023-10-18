@@ -48,7 +48,7 @@ public class EmployeeService : IEmployeeService
     {
         var managers = await _employeeRepository.ListManagersAsync();
 
-        var result = managers.Select(x => _mapper.Map<EmployeeResponse>(x));
+        var result = managers.Select(_mapper.Map<EmployeeResponse>);
 
         return result;
     }
