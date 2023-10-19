@@ -1,6 +1,8 @@
 ﻿namespace RestaurantReservation.API.Configurations.DependencyInjection;
 
 using FluentValidation;
+using RestaurantReservation.API.Configurations;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 public static class ConfigureDependencies
 {
@@ -35,6 +37,8 @@ public static class ConfigureDependencies
     private static IServiceCollection AddValidator(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddFluentValidationAutoValidation(options =>
+        options.OverrideDefaultResultFactoryWith<CustomValidationResultFactory>());
 
         return services;
     }
