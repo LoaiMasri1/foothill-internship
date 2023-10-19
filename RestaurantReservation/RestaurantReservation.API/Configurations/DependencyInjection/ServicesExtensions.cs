@@ -1,4 +1,5 @@
-﻿using RestaurantReservation.API.Services;
+﻿using RestaurantReservation.API.Middlewares;
+using RestaurantReservation.API.Services;
 using RestaurantReservation.API.Services.Interfaces;
 
 namespace RestaurantReservation.API.Configurations.DependencyInjection;
@@ -15,6 +16,10 @@ public static class ServicesExtensions
         services.AddScoped<ITableService, TableService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderItemService, OrderItemService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.AddScoped<GlobalExceptionHandler>();
 
         return services;
     }

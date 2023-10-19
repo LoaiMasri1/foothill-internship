@@ -58,4 +58,17 @@ public class CustomerRepository : ICustomerRepository
 
         return customers;
     }
+
+    public async Task<Customer> GetCustomerByEmailAsync(string email)
+    {
+        var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Email == email);
+
+        if (customer == null)
+        {
+            throw new NotFoundException($"Customer with email {email} does not exist");
+        }
+
+        return customer;
+
+    }
 }

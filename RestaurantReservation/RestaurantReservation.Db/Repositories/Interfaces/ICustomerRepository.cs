@@ -9,5 +9,6 @@ namespace RestaurantReservation.Db.Repositories.Interfaces
         IEnumerable<Customer> GetCustomersWithLargeParties(int minPartySize);
         Task<bool> IsExistAsync(int id);
         Task<Customer> UpdateCustomerAsync(int id, Customer customer);
+        Task<Customer> GetCustomerByEmailAsync(string email);
     }
 }

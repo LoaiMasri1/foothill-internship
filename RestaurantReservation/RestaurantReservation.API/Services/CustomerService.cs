@@ -56,4 +56,13 @@ public class CustomerService : ICustomerService
 
         return result;
     }
+
+    public async Task<CustomerResponse> GetCustomerByEmailAsync(string email)
+    {
+        var customer = await _customerRepository.
+            GetCustomerByEmailAsync(email);
+
+        var response = _mapper.Map<CustomerResponse>(customer);
+        return response;
+    }
 }

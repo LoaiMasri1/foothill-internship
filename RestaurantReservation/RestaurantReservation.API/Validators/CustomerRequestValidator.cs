@@ -20,6 +20,11 @@ public class CustomerRequestValidator : AbstractValidator<CustomerRequest>
             .EmailAddress()
             .WithMessage("Email is required. Email address must be in valid format.");
 
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .Matches(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$")
+            .WithMessage("Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
+
         RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("Phone number is required.");
     }
 }

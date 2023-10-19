@@ -9,6 +9,7 @@ public static class ConfigureDependencies
     public static IServiceCollection AddDependencies(this IServiceCollection services)
     {
         services
+            .AddAuth()
             .AddRepositories()
             .AddServices()
             .AddController()

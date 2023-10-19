@@ -9,5 +9,6 @@ namespace RestaurantReservation.API.Services.Interfaces
         Task DeleteCustomerAsync(int id);
         IEnumerable<CustomerResponse> GetCustomersWithLargeParties(int minPartySize);
         Task<CustomerResponse> UpdateCustomerAsync(int id, CustomerRequest customerRequest);
+        Task<CustomerResponse> GetCustomerByEmailAsync(string email);
     }
 }
