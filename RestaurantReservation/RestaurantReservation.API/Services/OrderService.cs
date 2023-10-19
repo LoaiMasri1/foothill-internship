@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -12,28 +11,18 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<OrderRequest> _validator;
 
     public OrderService(
         IOrderRepository orderRepository,
-        IMapper mapper,
-        IValidator<OrderRequest> validator
+        IMapper mapper
     )
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
-        _validator = validator;
     }
 
     public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest)
     {
-        var validationResult = await _validator.ValidateAsync(orderRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var newOrder = _mapper.Map<Order>(orderRequest);
         await _orderRepository.CreateOrderAsync(newOrder);
         var response = _mapper.Map<OrderResponse>(newOrder);
@@ -43,13 +32,6 @@ public class OrderService : IOrderService
 
     public async Task<OrderResponse> UpdateOrderAsync(int id, OrderRequest orderRequest)
     {
-        var validationResult = await _validator.ValidateAsync(orderRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var updatedOrder = _mapper.Map<Order>(orderRequest);
 
         var order = await _orderRepository.UpdateOrderAsync(id, updatedOrder);

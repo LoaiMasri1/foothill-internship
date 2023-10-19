@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -12,28 +11,18 @@ public class TableService : ITableService
 {
     private readonly ITableRepository _tableRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<TableRequest> _validator;
 
     public TableService(
         ITableRepository tableRepository,
-        IMapper mapper,
-        IValidator<TableRequest> validator
+        IMapper mapper
     )
     {
         _tableRepository = tableRepository;
         _mapper = mapper;
-        _validator = validator;
     }
 
     public async Task<TableResponse> CreateTableAsync(TableRequest tableRequest)
     {
-        var validationResult = await _validator.ValidateAsync(tableRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var newTable = _mapper.Map<Table>(tableRequest);
 
         await _tableRepository.CreateTableAsync(newTable);
@@ -44,13 +33,6 @@ public class TableService : ITableService
 
     public async Task<TableResponse> UpdateTableAsync(int id, TableRequest tableRequest)
     {
-        var validationResult = await _validator.ValidateAsync(tableRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var updatedTable = _mapper.Map<Table>(tableRequest);
 
         var table = await _tableRepository.UpdateTableAsync(id, updatedTable);

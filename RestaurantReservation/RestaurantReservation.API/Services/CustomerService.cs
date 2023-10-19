@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -12,28 +11,18 @@ public class CustomerService : ICustomerService
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<CustomerRequest> _validator;
 
     public CustomerService(
         ICustomerRepository customerRepository,
-        IMapper mapper,
-        IValidator<CustomerRequest> validator
+        IMapper mapper
     )
     {
         _customerRepository = customerRepository;
         _mapper = mapper;
-        _validator = validator;
     }
 
     public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest customerRequest)
     {
-        var validationResult = await _validator.ValidateAsync(customerRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var newCustomer = _mapper.Map<Customer>(customerRequest);
 
         await _customerRepository.CreateCustomerAsync(newCustomer);

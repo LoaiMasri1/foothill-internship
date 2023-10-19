@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -12,29 +11,18 @@ public class OrderItemService : IOrderItemService
 {
     private readonly IOrderItemRepository _orderItemRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<OrderItemRequest> _validator;
 
     public OrderItemService(
         IOrderItemRepository orderItemRepository,
-        IMapper mapper,
-        IValidator<OrderItemRequest> validator
-    )
+        IMapper mapper)
     {
         _orderItemRepository = orderItemRepository;
         _mapper = mapper;
-        _validator = validator;
     }
 
     public async Task<OrderItemResponse> CreateOrderItemAsync(OrderItemRequest orderItemRequest)
     {
-        var validationResult = await _validator.ValidateAsync(orderItemRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
-        var newOrderItem = _mapper.Map<OrderItem>(orderItemRequest);
+       var newOrderItem = _mapper.Map<OrderItem>(orderItemRequest);
 
         await _orderItemRepository.CreateOrderItemAsync(newOrderItem);
         var response = _mapper.Map<OrderItemResponse>(newOrderItem);
@@ -47,13 +35,6 @@ public class OrderItemService : IOrderItemService
         OrderItemRequest orderItemRequest
     )
     {
-        var validationResult = await _validator.ValidateAsync(orderItemRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var updatedOrderItem = _mapper.Map<OrderItem>(orderItemRequest);
 
         var orderItem = await _orderItemRepository.UpdateOrderItemAsync(id, updatedOrderItem);

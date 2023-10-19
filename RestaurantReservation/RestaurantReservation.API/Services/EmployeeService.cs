@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 using RestaurantReservation.Contracts.Responses;
@@ -12,28 +11,18 @@ public class EmployeeService : IEmployeeService
 {
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<EmployeeRequest> _validator;
 
     public EmployeeService(
         IEmployeeRepository employeeRepository,
-        IMapper mapper,
-        IValidator<EmployeeRequest> validator
+        IMapper mapper
     )
     {
         _employeeRepository = employeeRepository;
         _mapper = mapper;
-        _validator = validator;
     }
 
     public async Task<EmployeeResponse> CreateEmployeeAsync(EmployeeRequest employeeRequest)
     {
-        var validationResult = await _validator.ValidateAsync(employeeRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var newEmployee = _mapper.Map<Employee>(employeeRequest);
 
         await _employeeRepository.CreateEmployeeAsync(newEmployee);
@@ -44,13 +33,6 @@ public class EmployeeService : IEmployeeService
 
     public async Task<EmployeeResponse> UpdateEmployeeAsync(int id, EmployeeRequest employeeRequest)
     {
-        var validationResult = await _validator.ValidateAsync(employeeRequest);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
         var updatedEmployee = _mapper.Map<Employee>(employeeRequest);
 
         var employee = await _employeeRepository.UpdateEmployeeAsync(id, updatedEmployee);
