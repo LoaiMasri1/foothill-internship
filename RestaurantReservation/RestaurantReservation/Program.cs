@@ -216,6 +216,7 @@ class Program
             "John",
             "Console",
             "console@test.com",
+            "",
             1234567890
             );
 
