@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Services.Interfaces;
+using RestaurantReservation.Contracts.Requests;
+using RestaurantReservation.Contracts.Responses;
 using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.API.Services;
@@ -38,5 +41,12 @@ public class AuthService : IAuthService
         var token = _jwtProvider.Generate(customer);
 
         return new AuthResponse(token);
+    }
+
+    public async Task<CustomerResponse> RegisterAsync(CustomerRequest request)
+    {
+        var customerResponse = await _customerService.CreateCustomerAsync(request);
+
+        return customerResponse;
     }
 }

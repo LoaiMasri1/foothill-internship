@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 
 namespace RestaurantReservation.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/customers")]
 public class CustomerController : ControllerBase
@@ -12,16 +14,6 @@ public class CustomerController : ControllerBase
 
     public CustomerController(ICustomerService customerService) =>
         _customerService = customerService;
-
-    [HttpPost]
-    public async Task<IActionResult> CreateCustomerAsync(CustomerRequest customerRequest)
-    {
-        var customerResponse = await _customerService.CreateCustomerAsync(customerRequest);
-
-        var uri = $"{HttpContext.Request.Path}/{customerResponse.CustomerId}";
-
-        return Created(uri, customerResponse);
-    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteCustomerAsync(int id)

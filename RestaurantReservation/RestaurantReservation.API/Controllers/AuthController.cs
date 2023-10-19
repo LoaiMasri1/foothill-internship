@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Services.Interfaces;
+using RestaurantReservation.Contracts.Requests;
 
 namespace RestaurantReservation.API.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/auth")]
 public class AuthController : ControllerBase
@@ -22,4 +25,13 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> CreateCustomerAsync(CustomerRequest customerRequest)
+    {
+        var customerResponse = await _authService.RegisterAsync(customerRequest);
+
+        var uri = $"{HttpContext.Request.Path}/{customerResponse.CustomerId}";
+
+        return Created(uri, customerResponse);
+    }
 }

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.Services.Interfaces;
 using RestaurantReservation.Contracts.Requests;
 
 namespace RestaurantReservation.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("tables")]
 public class TableController : ControllerBase
