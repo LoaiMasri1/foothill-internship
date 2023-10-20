@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace RestaurantReservation.API.Configurations.DependencyInjection;
 
@@ -23,6 +24,9 @@ public static class SwaggerExtensions
                     Scheme = "bearer"
                 }
             );
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
             options.AddSecurityRequirement(
                 new OpenApiSecurityRequirement
