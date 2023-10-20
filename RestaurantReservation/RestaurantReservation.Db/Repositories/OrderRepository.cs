@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Repositories.Interfaces;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class OrderRepository
+public class OrderRepository : IOrderRepository
 {
     private readonly RestaurantReservationDbContext _context;
 
@@ -35,7 +36,8 @@ public class OrderRepository
 
     public async Task DeleteOrderAsync(int id)
     {
-        var order = await _context.Orders.FindAsync(id)
+        var order =
+            await _context.Orders.FindAsync(id)
             ?? throw new NotFoundException($"Order with id {id} does not exist");
 
         _context.Orders.Remove(order);
@@ -50,12 +52,9 @@ public class OrderRepository
 
     public async Task<double> CalculateAverageOrderAmountAsync(int employeeId)
     {
-        var orders = await _context.Orders
-            .Where(x => x.EmployeeId == employeeId)
-            .ToListAsync();
+        var orders = await _context.Orders.Where(x => x.EmployeeId == employeeId).ToListAsync();
 
-        var averageOrderAmount = orders
-            .Average(x => x.TotalAmount);
+        var averageOrderAmount = orders.Average(x => x.TotalAmount);
 
         return averageOrderAmount;
     }

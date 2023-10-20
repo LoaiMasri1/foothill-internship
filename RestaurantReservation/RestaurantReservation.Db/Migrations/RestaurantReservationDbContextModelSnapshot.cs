@@ -17,7 +17,7 @@ namespace RestaurantReservation.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,6 +52,10 @@ namespace RestaurantReservation.Db.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("last_name");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int")
                         .HasColumnName("phone_number");
@@ -67,6 +71,7 @@ namespace RestaurantReservation.Db.Migrations
                             Email = "john@test.com",
                             FirstName = "John",
                             LastName = "Doe",
+                            Password = "",
                             PhoneNumber = 0
                         },
                         new
@@ -75,6 +80,7 @@ namespace RestaurantReservation.Db.Migrations
                             Email = "jane@test.com",
                             FirstName = "Jane",
                             LastName = "Doe",
+                            Password = "",
                             PhoneNumber = 0
                         },
                         new
@@ -83,6 +89,7 @@ namespace RestaurantReservation.Db.Migrations
                             Email = "bob@tst.com",
                             FirstName = "Bob",
                             LastName = "Smith",
+                            Password = "",
                             PhoneNumber = 0
                         },
                         new
@@ -91,6 +98,7 @@ namespace RestaurantReservation.Db.Migrations
                             Email = "Alice@tst.uk",
                             FirstName = "Alice",
                             LastName = "Smith",
+                            Password = "",
                             PhoneNumber = 0
                         },
                         new
@@ -99,6 +107,7 @@ namespace RestaurantReservation.Db.Migrations
                             Email = "tom@tst.ps",
                             FirstName = "Tom",
                             LastName = "Jones",
+                            Password = "",
                             PhoneNumber = 0
                         });
                 });
@@ -304,7 +313,7 @@ namespace RestaurantReservation.Db.Migrations
                         {
                             OrderId = 1,
                             EmployeeId = 1,
-                            OrderDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2568),
+                            OrderDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5144),
                             ReservationId = 1,
                             TotalAmount = 19
                         },
@@ -312,7 +321,7 @@ namespace RestaurantReservation.Db.Migrations
                         {
                             OrderId = 2,
                             EmployeeId = 2,
-                            OrderDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2575),
+                            OrderDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5150),
                             ReservationId = 2,
                             TotalAmount = 14
                         },
@@ -320,7 +329,7 @@ namespace RestaurantReservation.Db.Migrations
                         {
                             OrderId = 3,
                             EmployeeId = 3,
-                            OrderDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2579),
+                            OrderDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5154),
                             ReservationId = 3,
                             TotalAmount = 14
                         },
@@ -328,7 +337,7 @@ namespace RestaurantReservation.Db.Migrations
                         {
                             OrderId = 4,
                             EmployeeId = 4,
-                            OrderDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2582),
+                            OrderDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5159),
                             ReservationId = 4,
                             TotalAmount = 9
                         },
@@ -336,7 +345,7 @@ namespace RestaurantReservation.Db.Migrations
                         {
                             OrderId = 5,
                             EmployeeId = 5,
-                            OrderDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2585),
+                            OrderDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5164),
                             ReservationId = 5,
                             TotalAmount = 10
                         });
@@ -454,7 +463,7 @@ namespace RestaurantReservation.Db.Migrations
                             ReservationsId = 1,
                             CustomerId = 1,
                             PartySize = 4,
-                            ReservationDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2468),
+                            ReservationDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5040),
                             ResturantId = 1,
                             TableId = 1
                         },
@@ -463,7 +472,7 @@ namespace RestaurantReservation.Db.Migrations
                             ReservationsId = 2,
                             CustomerId = 2,
                             PartySize = 4,
-                            ReservationDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2528),
+                            ReservationDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5096),
                             ResturantId = 1,
                             TableId = 2
                         },
@@ -472,7 +481,7 @@ namespace RestaurantReservation.Db.Migrations
                             ReservationsId = 3,
                             CustomerId = 3,
                             PartySize = 4,
-                            ReservationDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2532),
+                            ReservationDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5101),
                             ResturantId = 1,
                             TableId = 3
                         },
@@ -481,7 +490,7 @@ namespace RestaurantReservation.Db.Migrations
                             ReservationsId = 4,
                             CustomerId = 4,
                             PartySize = 4,
-                            ReservationDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2535),
+                            ReservationDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5105),
                             ResturantId = 1,
                             TableId = 4
                         },
@@ -490,7 +499,7 @@ namespace RestaurantReservation.Db.Migrations
                             ReservationsId = 5,
                             CustomerId = 5,
                             PartySize = 4,
-                            ReservationDate = new DateTime(2023, 9, 18, 1, 21, 22, 763, DateTimeKind.Local).AddTicks(2538),
+                            ReservationDate = new DateTime(2023, 10, 20, 16, 11, 2, 860, DateTimeKind.Local).AddTicks(5110),
                             ResturantId = 1,
                             TableId = 5
                         });

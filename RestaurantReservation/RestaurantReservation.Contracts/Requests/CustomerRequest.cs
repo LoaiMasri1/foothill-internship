@@ -4,5 +4,6 @@ public record CustomerRequest(
     string FirstName,
     string LastName,
     string Email,
+    string Password,
     int PhoneNumber
  );
