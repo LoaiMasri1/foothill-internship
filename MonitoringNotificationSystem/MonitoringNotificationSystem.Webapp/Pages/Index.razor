@@ -1,0 +1,85 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client;
+@using MonitoringNotificationSystem.Shared.Data;
+@using System.Text.Json;
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@implements IAsyncDisposable
+
+<div class="form-group">
+</div>
+<br />
+
+<ul id="messagesList">
+    @foreach (var state in statistics)
+    {
+        var cpu = (state.CpuUsage * 100).ToString("F2") + "%";
+        var memoryUsage = state.MemoryUsage.ToString("F2") + "MB";
+        var memoryAvailable = state.AvailableMemory.ToString("F2") + "MB";
+
+        <li>
+            <div><strong>Cpu Usage</strong>: @cpu</div>
+            <div><strong>Memory Usage</strong>: @memoryUsage</div>
+            <div><strong>Memory Avaialbe</strong>: @memoryAvailable</div>
+            <div><strong>Timestamp</strong>: @state.Timestamp</div>
+        </li>
+    }
+</ul>
+<br />
+<ul id="messagesList">
+    @foreach (var anomaly in anomalies)
+    {
+        <li>
+            <div style="color:red;"><strong>Anomaly</strong>: @anomaly</div>
+        </li>
+    }
+</ul>
+
+@code {
+    private HubConnection? hubConnection;
+    private List<ServerStatistics> statistics = new();
+    private List<string> anomalies = new();
+
+    private string signalRUrl = Environment.GetEnvironmentVariable("SIGNALR_URL")!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(new Uri(signalRUrl))
+            .Build();
+
+        hubConnection.On<string>("ReceiveMessage", (data) =>
+        {
+            var message = JsonSerializer.Deserialize<ServerStatistics>(data);
+
+            if (message is null)
+            {
+                return;
+            }
+
+            Console.WriteLine("Received message", data);
+
+            statistics.Add(message);
+            InvokeAsync(StateHasChanged);
+        });
+
+        hubConnection.On<string>("AnomalyMessage", (message) =>
+        {
+            Console.WriteLine("AnomalyMessage", message);
+
+            anomalies.Add(message);
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
