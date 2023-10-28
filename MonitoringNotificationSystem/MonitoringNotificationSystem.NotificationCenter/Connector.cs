@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace MonitoringNotificationSystem.NotificationProcessor;
 
-public class Connector
+public class Connector : IConnector
 {
     private readonly IHubContext<NotificationHub, IStatisticsClient> _hub;
     private readonly ILogger<Connector> _logger;

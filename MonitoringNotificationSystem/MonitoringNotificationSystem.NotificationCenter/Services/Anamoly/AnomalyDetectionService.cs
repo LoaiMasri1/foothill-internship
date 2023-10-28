@@ -9,12 +9,12 @@ namespace MonitoringNotificationSystem.NotificationProcessor.Services.Anamoly;
 public class AnomalyDetectionService : IAnomalyDetectionService
 {
     private readonly IHubContext<NotificationHub, IStatisticsClient> _hub;
-    private readonly List<IAnomalyAlertStrategy> _alertStrategies;
+    private readonly IEnumerable<IAnomalyAlertStrategy> _alertStrategies;
     private readonly INotificationRepository _notificationRepository;
 
     public AnomalyDetectionService(
         IHubContext<NotificationHub, IStatisticsClient> hub,
-        List<IAnomalyAlertStrategy> alertStrategies,
+        IEnumerable<IAnomalyAlertStrategy> alertStrategies,
         INotificationRepository notificationRepository
     )
     {

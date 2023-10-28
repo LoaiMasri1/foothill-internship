@@ -1,5 +1,4 @@
 ﻿using MonitoringNotificationSystem.MessageBroker;
-using MonitoringNotificationSystem.NotificationProcessor;
 
 namespace MonitoringNotificationSystem.NotificationProcessor.DependencyInjection;
 

@@ -7,18 +7,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["MonitoringNotificationSystem.NotificationCenter/MonitoringNotificationSystem.NotificationCenter.csproj", "MonitoringNotificationSystem.NotificationCenter/"]
+COPY ["MonitoringNotificationSystem.NotificationCenter/MonitoringNotificationSystem.NotificationProcessor.csproj", "MonitoringNotificationSystem.NotificationCenter/"]
 COPY ["MonitoringNotificationSystem.MessageBroker/MonitoringNotificationSystem.MessageBroker.csproj", "MonitoringNotificationSystem.MessageBroker/"]
 COPY ["MonitoringNotificationSystem.Shared/MonitoringNotificationSystem.Shared.csproj", "MonitoringNotificationSystem.Shared/"]
-RUN dotnet restore "MonitoringNotificationSystem.NotificationCenter/MonitoringNotificationSystem.NotificationCenter.csproj"
+RUN dotnet restore "MonitoringNotificationSystem.NotificationCenter/MonitoringNotificationSystem.NotificationProcessor.csproj"
 COPY . .
 WORKDIR "/src/MonitoringNotificationSystem.NotificationCenter"
-RUN dotnet build "MonitoringNotificationSystem.NotificationCenter.csproj" -c Release -o /app/build
+RUN dotnet build "MonitoringNotificationSystem.NotificationProcessor.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MonitoringNotificationSystem.NotificationCenter.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "MonitoringNotificationSystem.NotificationProcessor.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MonitoringNotificationSystem.NotificationCenter.dll"]
+ENTRYPOINT ["dotnet", "MonitoringNotificationSystem.NotificationProcessor.dll"]

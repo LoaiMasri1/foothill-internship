@@ -46,7 +46,7 @@ public class RabbitMQMessageBroker : IMessageBroker
 
         _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
 
-        await Task.Delay(Timeout.Infinite);
+        await Task.CompletedTask;
     }
 
     public void Publish<T>(string topicName, T message)

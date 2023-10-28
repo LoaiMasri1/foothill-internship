@@ -27,6 +27,11 @@ public static class Utilities
         };
         timer.Start();
 
-        Console.ReadLine();
+        Console.WriteLine(
+            $"Started periodic server statistics publisher with interval {samplingIntervalSeconds} seconds"
+        );
+
+        while (true)
+            Thread.Sleep(1000);
     }
 }
